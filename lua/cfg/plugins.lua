@@ -9,30 +9,38 @@ packer.init({
 })
 
 local ret = packer.startup(function(use)
-	use("akinsho/bufferline.nvim")
-	use("akinsho/toggleterm.nvim")
-	use("bluz71/vim-moonfly-colors")
-	use("hrsh7th/cmp-buffer")
-	use("hrsh7th/cmp-cmdline")
-	use("hrsh7th/cmp-nvim-lsp")
-	use("hrsh7th/cmp-path")
-	use("hrsh7th/cmp-vsnip")
-	use("hrsh7th/nvim-cmp")
-	use("hrsh7th/vim-vsnip")
-	use("jose-elias-alvarez/null-ls.nvim")
-	use("kyazdani42/nvim-web-devicons")
-	use("lewis6991/gitsigns.nvim")
-	use("lewis6991/impatient.nvim")
-	use("lukas-reineke/indent-blankline.nvim")
-	use("neovim/nvim-lspconfig")
-	use("numToStr/Comment.nvim")
-	use("nvim-lua/plenary.nvim")
-	use("nvim-lualine/lualine.nvim")
-	use("nvim-telescope/telescope.nvim")
-	use("nvim-treesitter/nvim-treesitter")
-	use("rafamadriz/friendly-snippets")
-	use("wbthomason/packer.nvim")
-	use("windwp/nvim-autopairs")
+	local plugins = {
+		"akinsho/bufferline.nvim",
+		"akinsho/toggleterm.nvim",
+		"bluz71/vim-moonfly-colors",
+		"hrsh7th/cmp-buffer",
+		"hrsh7th/cmp-cmdline",
+		"hrsh7th/cmp-nvim-lsp",
+		"hrsh7th/cmp-path",
+		"hrsh7th/cmp-vsnip",
+		"hrsh7th/nvim-cmp",
+		"hrsh7th/vim-vsnip",
+		"jose-elias-alvarez/null-ls.nvim",
+		"jose-elias-alvarez/nvim-lsp-ts-utils",
+		"kyazdani42/nvim-web-devicons",
+		"lewis6991/gitsigns.nvim",
+		"lewis6991/impatient.nvim",
+		"lukas-reineke/indent-blankline.nvim",
+		"neovim/nvim-lspconfig",
+		"numToStr/Comment.nvim",
+		"nvim-lua/plenary.nvim",
+		"nvim-lualine/lualine.nvim",
+		"nvim-telescope/telescope.nvim",
+		"nvim-treesitter/nvim-treesitter",
+		"p00f/nvim-ts-rainbow",
+		"rafamadriz/friendly-snippets",
+		"wbthomason/packer.nvim",
+		"windwp/nvim-autopairs",
+	}
+
+	for i in pairs(plugins) do
+		use(plugins[i])
+	end
 
 	if PACKER_BOOTSTRAP then
 		packer.sync()
@@ -40,13 +48,21 @@ local ret = packer.startup(function(use)
 end)
 
 local cfg = require("cfg.cfg")
-
 for k, v in pairs(cfg.setup) do
 	require(k).setup(v)
 end
 
+local binds = require("cfg.binds")
 for k, v in pairs(cfg.lsp) do
-	v.on_attach = on_attach
+	if v.on_attach == nil then
+		v.on_attach = binds
+	else
+		local f = v.on_attach
+		v.on_attach = function(client, bufnr)
+			binds(client, bufnr)
+			f(client, bufnr)
+		end
+	end
 	v.flags = { debounce_text_changes = 150 }
 	require("lspconfig")[k].setup(v)
 end
@@ -61,11 +77,11 @@ nls.setup({
 		return r
 	end)(),
 
-	on_attach = function(client)
-		if client.resolved_capabilities.document_formatting then
-			vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_seq_sync()")
-		end
-	end,
+	-- on_attach = function(client)
+	-- 	if client.resolved_capabilities.document_formatting then
+	-- 		vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_seq_sync()")
+	-- 	end
+	-- end,
 })
 
 return ret

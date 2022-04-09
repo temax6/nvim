@@ -5,7 +5,22 @@ local re = { silent = true }
 map("", "<Space>", "<Nop>", nore)
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
-local ld = "<Leader>"
+
+local function cmd(c)
+	return ":" .. c .. "<CR>"
+end
+
+local function lua(c)
+	return cmd("lua " .. c)
+end
+
+local function tele(c)
+	return cmd("Telescope " .. c)
+end
+
+local function l(k)
+	return "<Leader>" .. k
+end
 
 local modes = {
 	normal = "n",
@@ -16,54 +31,77 @@ local modes = {
 	terminal = "t",
 }
 
-for k, v in pairs({
+local maps = {
 	normal = {
-		{ "<C-Down>", ":resize +2<CR>" },
-		{ "<C-Left>", ":vertical resize -2<CR>" },
-		{ "<C-Right>", ":vertical resize +2<CR>" },
-		{ "<C-Up>", ":resize -2<CR>" },
+		{ l("d"), lua("vim.diagnostic.open_float()") },
+		{ l("D"), tele("diagnostics") },
+		{ l("h"), lua("vim.lsp.buf.hover()"), lsp = true },
+		{ l("r"), lua("vim.lsp.buf.rename()"), lsp = true },
+		{ l("f"), lua("vim.lsp.buf.formatting_seq_sync()"), lsp = true },
+		{ l("g"), tele("lsp_definitions") },
+		{ l("a"), tele("lsp_code_actions") },
+		{ "<C-Down>", cmd("resize +2") },
+		{ "<C-Left>", cmd("vertical resize -2") },
+		{ "<C-Right>", cmd("vertical resize +2") },
+		{ "<C-Up>", cmd("resize -2") },
 		{ "<C-h>", "<C-w>h" },
 		{ "<C-j>", "<C-w>j" },
 		{ "<C-k>", "<C-w>k" },
 		{ "<C-l>", "<C-w>l" },
 		{ "<S-h>", "^" },
-		{ "<S-j>", ":bnext<CR>" },
-		{ "<S-k>", ":bprevious<CR>" },
+		{ "<S-j>", cmd("bnext") },
+		{ "<S-k>", cmd("bprevious") },
 		{ "<S-l>", "$" },
-		{ ld .. "/", "gcc" },
-		{ ld .. "W", ":w !sudo tee %<CR>" },
-		{ ld .. "a", ":Telescope current_buffer_fuzzy_find<CR>" },
-		{ ld .. "c", ":bdelete!<CR>" },
-		{ ld .. "d", ":lua vim.diagnostic.open_float()<CR>" },
-		{ ld .. "f", ":Telescope find_files<CR>" },
-		{ ld .. "h", ":lua vim.lsp.buf.hover()<CR>" },
-		{ ld .. "l", ":noh<CR>" },
-		{ ld .. "pdf", ":silent! !mupdf %:p:r.pdf &<CR>" },
-		{ ld .. "q", ":q!<CR>" },
-		{ ld .. "r", ":Telescope oldfiles<CR>" },
-		{ ld .. "s", ":Telescope buffers<CR>" },
-		{ ld .. "w", ":w!<CR>" },
+		{ l("/"), "gcc", opts = re },
+		{ l("W"), cmd("w !sudo tee %") },
+		{ l("c"), cmd("bdelete!") },
+		{ l("l"), cmd("noh") },
+		{ l("pdf"), cmd("silent! !mupdf %:p:r.pdf &") },
+		{ l("q"), cmd("q!") },
+		{ l("w"), cmd("w!") },
+		{ "<C-f>", tele("current_buffer_fuzzy_find") },
+		{ "<C-s>", tele("buffers") },
+		{ "<C-e>", tele("git_files hidden=true") },
+		{ "<C-o>", tele("find_files hidden=true") },
+		{ "<C-r>", tele("oldfiles") },
+		{ l("t"), tele("builtin") },
 	},
 	insert = {
 		{ "jk", "<ESC>" },
 	},
 	visual = {
-		{ "<S-h>", "^", re },
-		{ "<S-l>", "$", re },
-		{ ld .. "/", "gc", re },
-		{ ld .. "c", '"*y' },
+		{ "<S-h>", "^", opts = re },
+		{ "<S-l>", "$", opts = re },
+		{ l("/"), "gc", opts = re },
+		{ l("c"), '"*y' },
 	},
 	block = {
-		{ ld .. "c", '"*y' },
+		{ l("c"), '"*y' },
 	},
 	command = {},
 	terminal = {
 		{ "jk", "<ESC>" },
 	},
-}) do
+}
+
+for k, v in pairs(maps) do
 	for m in pairs(v) do
 		m = v[m]
-		map(modes[k], m[1], m[2], m[3] == nil and nore or m[3])
+		if not m.lsp then
+			map(modes[k], m[1], m[2], m.opts == nil and nore or m.opts)
+		end
+	end
+end
+
+return function(_, bufnr)
+	vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
+	for k, v in pairs(maps) do
+		for m in pairs(v) do
+			m = v[m]
+			if m.lsp then
+				vim.api.nvim_buf_set_keymap(bufnr, modes[k], m[1], m[2], m.opts == nil and nore or m.opts)
+			end
+		end
 	end
 end
 
