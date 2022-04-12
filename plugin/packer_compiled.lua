@@ -74,6 +74,16 @@ _G.packer_plugins = {
     path = "/home/toby/.local/share/nvim/site/pack/packer/start/Comment.nvim",
     url = "https://github.com/numToStr/Comment.nvim"
   },
+  ["auto-session"] = {
+    loaded = true,
+    path = "/home/toby/.local/share/nvim/site/pack/packer/start/auto-session",
+    url = "https://github.com/rmagatti/auto-session"
+  },
+  ["bufdelete.nvim"] = {
+    loaded = true,
+    path = "/home/toby/.local/share/nvim/site/pack/packer/start/bufdelete.nvim",
+    url = "https://github.com/famiu/bufdelete.nvim"
+  },
   ["bufferline.nvim"] = {
     loaded = true,
     path = "/home/toby/.local/share/nvim/site/pack/packer/start/bufferline.nvim",
@@ -144,6 +154,11 @@ _G.packer_plugins = {
     path = "/home/toby/.local/share/nvim/site/pack/packer/start/nvim-cmp",
     url = "https://github.com/hrsh7th/nvim-cmp"
   },
+  ["nvim-lsp-ts-utils"] = {
+    loaded = true,
+    path = "/home/toby/.local/share/nvim/site/pack/packer/start/nvim-lsp-ts-utils",
+    url = "https://github.com/jose-elias-alvarez/nvim-lsp-ts-utils"
+  },
   ["nvim-lspconfig"] = {
     loaded = true,
     path = "/home/toby/.local/share/nvim/site/pack/packer/start/nvim-lspconfig",
@@ -153,6 +168,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/toby/.local/share/nvim/site/pack/packer/start/nvim-treesitter",
     url = "https://github.com/nvim-treesitter/nvim-treesitter"
+  },
+  ["nvim-ts-rainbow"] = {
+    loaded = true,
+    path = "/home/toby/.local/share/nvim/site/pack/packer/start/nvim-ts-rainbow",
+    url = "https://github.com/p00f/nvim-ts-rainbow"
   },
   ["nvim-web-devicons"] = {
     loaded = true,
@@ -169,6 +189,11 @@ _G.packer_plugins = {
     path = "/home/toby/.local/share/nvim/site/pack/packer/start/plenary.nvim",
     url = "https://github.com/nvim-lua/plenary.nvim"
   },
+  ["session-lens"] = {
+    loaded = true,
+    path = "/home/toby/.local/share/nvim/site/pack/packer/start/session-lens",
+    url = "https://github.com/rmagatti/session-lens"
+  },
   ["telescope.nvim"] = {
     loaded = true,
     path = "/home/toby/.local/share/nvim/site/pack/packer/start/telescope.nvim",
@@ -178,6 +203,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/toby/.local/share/nvim/site/pack/packer/start/toggleterm.nvim",
     url = "https://github.com/akinsho/toggleterm.nvim"
+  },
+  ["vim-illuminate"] = {
+    loaded = true,
+    path = "/home/toby/.local/share/nvim/site/pack/packer/start/vim-illuminate",
+    url = "https://github.com/RRethy/vim-illuminate"
   },
   ["vim-moonfly-colors"] = {
     loaded = true,

@@ -6,83 +6,80 @@ map("", "<Space>", "<Nop>", nore)
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
-local function cmd(c)
-	return ":" .. c .. "<CR>"
-end
-
-local function lua(c)
-	return cmd("lua " .. c)
-end
-
-local function tele(c)
-	return cmd("Telescope " .. c)
-end
-
-local function l(k)
-	return "<Leader>" .. k
-end
+-- stylua: ignore start
+local function cmd(c) return ":" .. c .. "<CR>" end
+local function lua(c) return cmd("lua " .. c) end
+local function tel(c) return cmd("Telescope " .. c) end
+local function l(k)   return "<Leader>" .. k end
 
 local modes = {
-	normal = "n",
-	insert = "i",
-	visual = "v",
-	block = "x",
-	command = "c",
+	normal   = "n",
+	insert   = "i",
+	visual   = "v",
+	block    = "x",
+	command  = "c",
 	terminal = "t",
 }
 
 local maps = {
 	normal = {
-		{ l("d"), lua("vim.diagnostic.open_float()") },
-		{ l("D"), tele("diagnostics") },
-		{ l("h"), lua("vim.lsp.buf.hover()"), lsp = true },
-		{ l("r"), lua("vim.lsp.buf.rename()"), lsp = true },
-		{ l("f"), lua("vim.lsp.buf.formatting_seq_sync()"), lsp = true },
-		{ l("g"), tele("lsp_definitions") },
-		{ l("a"), tele("lsp_code_actions") },
-		{ "<C-Down>", cmd("resize +2") },
-		{ "<C-Left>", cmd("vertical resize -2") },
-		{ "<C-Right>", cmd("vertical resize +2") },
-		{ "<C-Up>", cmd("resize -2") },
-		{ "<C-h>", "<C-w>h" },
-		{ "<C-j>", "<C-w>j" },
-		{ "<C-k>", "<C-w>k" },
-		{ "<C-l>", "<C-w>l" },
-		{ "<S-h>", "^" },
-		{ "<S-j>", cmd("bnext") },
-		{ "<S-k>", cmd("bprevious") },
-		{ "<S-l>", "$" },
-		{ l("/"), "gcc", opts = re },
-		{ l("W"), cmd("w !sudo tee %") },
-		{ l("c"), cmd("bdelete!") },
-		{ l("l"), cmd("noh") },
-		{ l("pdf"), cmd("silent! !mupdf %:p:r.pdf &") },
-		{ l("q"), cmd("q!") },
-		{ l("w"), cmd("w!") },
-		{ "<C-f>", tele("current_buffer_fuzzy_find") },
-		{ "<C-s>", tele("buffers") },
-		{ "<C-e>", tele("git_files hidden=true") },
-		{ "<C-o>", tele("find_files hidden=true") },
-		{ "<C-r>", tele("oldfiles") },
-		{ l("t"), tele("builtin") },
+		{ l("d"),       lua("vim.diagnostic.open_float()")                      },
+		{ l("D"),       tel("diagnostics")                                      },
+		{ l("h"),       lua("vim.lsp.buf.hover()"),                 lsp = true  },
+		{ l("r"),       lua("vim.lsp.buf.rename()"),                lsp = true  },
+		{ l("f"),       lua("vim.lsp.buf.formatting_seq_sync()"),   lsp = true  },
+		{ l("g"),       tel("lsp_definitions")                                  },
+		{ l("a"),       tel("lsp_code_actions")                                 },
+		{ "<C-Down>",   cmd("resize +2")                                        },
+		{ "<C-Left>",   cmd("vertical resize -2")                               },
+		{ "<C-Right>",  cmd("vertical resize +2")                               },
+		{ "<C-Up>",     cmd("resize -2")                                        },
+		{ "<C-h>",          "<C-w>h"                                            },
+		{ "<C-j>",          "<C-w>j"                                            },
+		{ "<C-k>",          "<C-w>k"                                            },
+		{ "<C-l>",          "<C-w>l"                                            },
+		{ "<S-h>",          "^"                                                 },
+		{ "<S-j>",      cmd("bnext")                                            },
+		{ "<S-k>",      cmd("bprevious")                                        },
+		{ "<S-l>",          "$"                                                 },
+		{ l("/"),           "gcc",                                  opts = re   },
+		{ l("c"),       cmd("bdelete!")                                         },
+		{ l("C"),       cmd("Bdelete!")                                         },
+		{ l("l"),       cmd("noh")                                              },
+		{ l("pdf"),     cmd("silent! !mupdf %:p:r.pdf &")                       },
+		{ l("q"),       cmd("q!")                                               },
+		{ l("Q"),       cmd("qa!")                                              },
+		{ l("w"),       cmd("w!")                                               },
+		{ l("W"),       cmd("w !sudo tee %")                                    },
+		{ l("p"),       cmd("PackerSync")                                       },
+		{ l("m"),       cmd("messages")                                         },
+		{ "<C-r>",      cmd("silent! !ff_refresh.sh")                           },
+		{ "<C-f>",      tel("current_buffer_fuzzy_find")                        },
+		{ "<C-a>",      tel("buffers")                                          },
+		{ "<C-e>",      tel("git_files hidden=true")                            },
+		{ "<C-o>",      tel("find_files hidden=true")                           },
+		{ "<C-s>",      tel("session-lens search_session")                      },
+		{ "<C-p>",      tel("oldfiles")                                         },
+		{ l("t"),       tel("builtin")                                          },
 	},
 	insert = {
-		{ "jk", "<ESC>" },
+		{ "jk",         "<ESC>" },
 	},
 	visual = {
-		{ "<S-h>", "^", opts = re },
-		{ "<S-l>", "$", opts = re },
-		{ l("/"), "gc", opts = re },
-		{ l("c"), '"*y' },
+		{ "<S-h>",      "^",                                        opts = re   },
+		{ "<S-l>",      "$",                                        opts = re   },
+		{ l("/"),       "gc",                                       opts = re   },
+		{ l("c"),       '"*y'                                                   },
 	},
 	block = {
-		{ l("c"), '"*y' },
+		{ l("c"),       '"*y'                                                   },
 	},
 	command = {},
 	terminal = {
-		{ "jk", "<ESC>" },
+		{ "jk",         "<ESC>"                                                 },
 	},
 }
+-- stylua: ignore end
 
 for k, v in pairs(maps) do
 	for m in pairs(v) do
@@ -106,30 +103,3 @@ return function(_, bufnr)
 end
 
 -- keymap("n", "<Leader>e", ":TroubleToggle document_diagnostics<CR>", opts)
---
--- Move text up and down
--- keymap("n", "<A-j>", "<Esc>:m .+1<CR>==gi", opts)
--- keymap("n", "<A-k>", "<Esc>:m .-2<CR>==gi", opts)
---
--- Stay in indent mode
--- keymap("v", "<", "<gv", opts)
--- keymap("v", ">", ">gv", opts)
-
--- Move text up and down
--- keymap("v", "<A-j>", ":m .+1<CR>==", opts)
--- keymap("v", "<A-k>", ":m .-2<CR>==", opts)
--- keymap("v", "p", '"_dP', opts)
-
--- Visual Block --
--- Move text up and down
--- keymap("x", "J", ":move '>+1<CR>gv-gv", opts)
--- keymap("x", "K", ":move '<-2<CR>gv-gv", opts)
--- keymap("x", "<A-j>", ":move '>+1<CR>gv-gv", opts)
--- keymap("x", "<A-k>", ":move '<-2<CR>gv-gv", opts)
-
--- Terminal --
--- Better terminal navigation
--- keymap("t", "<C-h>", "<C-\\><C-N><C-w>h", term_opts)
--- keymap("t", "<C-j>", "<C-\\><C-N><C-w>j", term_opts)
--- keymap("t", "<C-k>", "<C-\\><C-N><C-w>k", term_opts)
--- keymap("t", "<C-l>", "<C-\\><C-N><C-w>l", term_opts)

@@ -1,12 +1,23 @@
 local M = {}
 
 M.setup = {
+	["auto-session"] = { log_level = "info" },
+	["session-lens"] = {
+		require("telescope").load_extension("session-lens"),
+	},
 	bufferline = {},
 	Comment = {},
 	gitsigns = {},
 	cmp = require("cfg.comp"),
 	indent_blankline = { check_ts = true },
-	lualine = { options = { theme = "moonfly" } },
+	lualine = {
+		options = { theme = "moonfly" },
+		sections = {
+			lualine_c = {
+				require("auto-session-library").current_session_name,
+			},
+		},
+	},
 	["nvim-autopairs"] = {
 		show_current_context_start = true,
 		use_treesitter = true,
@@ -30,6 +41,15 @@ M.setup = {
 			enable = true,
 		},
 	},
+	telescope = {
+		defaults = {
+			mappings = {
+				n = {
+					["<Leader>c"] = require("telescope.actions").close,
+				},
+			},
+		},
+	},
 	toggleterm = {
 		open_mapping = [[<s-t>]],
 		insert_mappings = false,
@@ -44,6 +64,19 @@ M.lsp = {
 	clangd = {},
 	gopls = {},
 	hls = {},
+	html = {
+		capabilities = function()
+			local c = vim.lsp.protocol.make_client_capabilities()
+			c.textDocument.completion.completionItem.snippetSupport = true
+			return c
+		end,
+		-- on_attach = function(client, bufnr)
+		-- 	if client.resolved_capabilities.completion then
+		-- 		require("completion").on_attach(client, bufnr)
+		-- 	end
+		-- end,
+		-- cmd = { "vscode-html-languageserver", "--stdio" }
+	},
 	pyright = {},
 	rust_analyzer = {},
 	texlab = {},

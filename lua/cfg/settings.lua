@@ -17,7 +17,7 @@ local options = {
 	scrolloff = 999,
 	shiftwidth = 4,
 	showtabline = 2,
-	sidescrolloff = 999,
+	sidescrolloff = 8,
 	signcolumn = "yes",
 	smartcase = true,
 	smartindent = true,
@@ -41,7 +41,9 @@ end
 vim.diagnostic.config({ virtual_text = false })
 vim.g.coq_settings = { auto_start = "shut-up" }
 vim.g.do_filetype_lua = 1
+-- vim.g.Illuminate_highlightUnderCursor = 0
 vim.opt.shortmess:append("c")
+vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal"
 
 vim.cmd([[
     autocmd BufWritePost *.tex silent! !latexmk -pdf && latexmk -c && pkill -HUP mupdf

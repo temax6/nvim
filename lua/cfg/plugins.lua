@@ -10,9 +10,11 @@ packer.init({
 
 local ret = packer.startup(function(use)
 	local plugins = {
+		"RRethy/vim-illuminate",
 		"akinsho/bufferline.nvim",
 		"akinsho/toggleterm.nvim",
 		"bluz71/vim-moonfly-colors",
+		"famiu/bufdelete.nvim",
 		"hrsh7th/cmp-buffer",
 		"hrsh7th/cmp-cmdline",
 		"hrsh7th/cmp-nvim-lsp",
@@ -34,6 +36,8 @@ local ret = packer.startup(function(use)
 		"nvim-treesitter/nvim-treesitter",
 		"p00f/nvim-ts-rainbow",
 		"rafamadriz/friendly-snippets",
+		"rmagatti/auto-session",
+		"rmagatti/session-lens",
 		"wbthomason/packer.nvim",
 		"windwp/nvim-autopairs",
 	}
@@ -64,6 +68,7 @@ for k, v in pairs(cfg.lsp) do
 		end
 	end
 	v.flags = { debounce_text_changes = 150 }
+	v.capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
 	require("lspconfig")[k].setup(v)
 end
 
