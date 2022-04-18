@@ -39,7 +39,6 @@ end
 
 -- vim.api.nvim_buf_set_option(0, "omnifunc", "v:lua.vim.lsp.omnifunc")
 vim.diagnostic.config({ virtual_text = false })
-vim.g.coq_settings = { auto_start = "shut-up" }
 vim.g.do_filetype_lua = 1
 -- vim.g.Illuminate_highlightUnderCursor = 0
 vim.opt.shortmess:append("c")

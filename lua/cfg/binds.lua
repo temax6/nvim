@@ -53,7 +53,7 @@ local maps = {
 		{ l("W"),       cmd("w !sudo tee %")                                    },
 		{ l("p"),       cmd("PackerSync")                                       },
 		{ l("m"),       cmd("messages")                                         },
-		{ "<C-r>",      cmd("silent! !ff_refresh.sh")                           },
+		{ "<C-S-R>",    cmd("silent! !ff_refresh.sh")                           },
 		{ "<C-f>",      tel("current_buffer_fuzzy_find")                        },
 		{ "<C-a>",      tel("buffers")                                          },
 		{ "<C-e>",      tel("git_files hidden=true")                            },

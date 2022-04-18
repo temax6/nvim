@@ -62,6 +62,7 @@ M.lsp = {
 	-- eslint = {},
 	bashls = {},
 	clangd = {},
+    dartls = {},
 	gopls = {},
 	hls = {},
 	html = {
@@ -102,6 +103,7 @@ M.lsp = {
 
 M.fmt = {
 	autopep8 = {},
+    dart_format = {},
 	fish_indent = {},
 	fourmolu = {},
 	gofmt = {},
