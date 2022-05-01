@@ -18,17 +18,17 @@ M.setup = {
 			},
 		},
 	},
-	["nvim-autopairs"] = {
-		show_current_context_start = true,
-		use_treesitter = true,
-		buftype_exclude = { "terminal", "nofile" },
-		filetype_exclude = {
-			"help",
-			"alpha",
-			"packer",
-			"Trouble",
-		},
-	},
+	-- ["nvim-autopairs"] = {
+	-- 	show_current_context_start = true,
+	-- 	use_treesitter = true,
+	-- 	buftype_exclude = { "terminal", "nofile" },
+	-- 	filetype_exclude = {
+	-- 		"help",
+	-- 		"alpha",
+	-- 		"packer",
+	-- 		"Trouble",
+	-- 	},
+	-- },
 	["nvim-treesitter.configs"] = {
 		highlight = {
 			enable = true,
@@ -62,7 +62,7 @@ M.lsp = {
 	-- eslint = {},
 	bashls = {},
 	clangd = {},
-    dartls = {},
+	dartls = {},
 	gopls = {},
 	hls = {},
 	html = {
@@ -99,11 +99,12 @@ M.lsp = {
 			},
 		},
 	},
+	zls = {},
 }
 
 M.fmt = {
 	autopep8 = {},
-    dart_format = {},
+	dart_format = {},
 	fish_indent = {},
 	fourmolu = {},
 	gofmt = {},

@@ -51,7 +51,7 @@ local maps = {
 		{ l("Q"),       cmd("qa!")                                              },
 		{ l("w"),       cmd("w!")                                               },
 		{ l("W"),       cmd("w !sudo tee %")                                    },
-		{ l("p"),       cmd("PackerSync")                                       },
+		{ l("p"),       cmd("so % | PackerSync")                                },
 		{ l("m"),       cmd("messages")                                         },
 		{ "<C-S-R>",    cmd("silent! !ff_refresh.sh")                           },
 		{ "<C-f>",      tel("current_buffer_fuzzy_find")                        },

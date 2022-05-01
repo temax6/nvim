@@ -22,6 +22,7 @@ local ret = packer.startup(function(use)
 		"hrsh7th/cmp-vsnip",
 		"hrsh7th/nvim-cmp",
 		"hrsh7th/vim-vsnip",
+        "hrsh7th/vim-vsnip-integ",
 		"jose-elias-alvarez/null-ls.nvim",
 		"jose-elias-alvarez/nvim-lsp-ts-utils",
 		"kyazdani42/nvim-web-devicons",
@@ -39,7 +40,7 @@ local ret = packer.startup(function(use)
 		"rmagatti/auto-session",
 		"rmagatti/session-lens",
 		"wbthomason/packer.nvim",
-		"windwp/nvim-autopairs",
+		-- "windwp/nvim-autopairs",
 	}
 
 	for i in pairs(plugins) do

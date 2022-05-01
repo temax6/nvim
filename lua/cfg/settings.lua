@@ -40,6 +40,7 @@ end
 -- vim.api.nvim_buf_set_option(0, "omnifunc", "v:lua.vim.lsp.omnifunc")
 vim.diagnostic.config({ virtual_text = false })
 vim.g.do_filetype_lua = 1
+vim.g.vsnip_filetypes = { dart = { "flutter" } }
 -- vim.g.Illuminate_highlightUnderCursor = 0
 vim.opt.shortmess:append("c")
 vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal"
