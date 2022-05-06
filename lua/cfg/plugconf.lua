@@ -1,8 +1,4 @@
 return {
-	-- ["auto-session"] = { log_level = "info" },
-	-- ["session-lens"] = {
-	-- 	require("telescope").load_extension("session-lens"),
-	-- },
 	bufferline = {},
 	Comment = {},
 	-- ["flutter-tools"] = {lsp = {autostart = true}},
@@ -78,24 +74,7 @@ return {
 	indent_blankline = { check_ts = true },
 	lualine = {
 		options = { theme = "moonfly" },
-		-- sections = {
-		-- 	lualine_c = {
-		-- 		require("auto-session-library").current_session_name,
-		-- 	},
-		-- },
 	},
-	-- ["nvim-autopairs"] = {
-	-- 	show_current_context_start = true,
-	-- 	use_treesitter = true,
-	-- 	buftype_exclude = { "terminal", "nofile" },
-	-- 	filetype_exclude = {
-	-- 		"help",
-	-- 		"alpha",
-	-- 		"packer",
-	-- 		"Trouble",
-	-- 	},
-	-- },
-	--
 	["null-ls"] = function(nls)
 		return {
 			sources = (function()
@@ -131,31 +110,6 @@ return {
 			},
 		},
 	},
-	-- telescope = function(tsc)
-	-- 	tsc.setup({
-	-- 		defaults = {
-	-- 			mappings = {
-	-- 				n = {
-	-- 					["<Leader>c"] = require("telescope.actions").close,
-	-- 				},
-	-- 			},
-	-- 		},
-	-- 		extensions = {
-	-- 			file_browser = {
-	-- 				theme = "ivy",
-	-- 				mappings = {
-	-- 					["i"] = {
-	-- 						-- your custom insert mode mappings
-	-- 					},
-	-- 					["n"] = {
-	-- 						-- your custom normal mode mappings
-	-- 					},
-	-- 				},
-	-- 			},
-	-- 		},
-	-- 	})
-	-- 	tsc.load_extension("file_browser")
-	-- end,
 	toggleterm = {
 		open_mapping = [[<s-t>]],
 		insert_mappings = false,

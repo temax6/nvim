@@ -41,10 +41,6 @@ local ret = packer.startup(function(use)
 		"p00f/nvim-ts-rainbow",
 		"rafamadriz/friendly-snippets",
 		"wbthomason/packer.nvim",
-		-- "nvim-telescope/telescope-file-browser.nvim",
-		-- "rmagatti/auto-session",
-		-- "rmagatti/session-lens",
-		-- "windwp/nvim-autopairs",
 	}
 
 	for i in pairs(plugins) do
