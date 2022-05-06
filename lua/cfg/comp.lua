@@ -1,5 +1,8 @@
 local cmp = require("cmp")
-cmp.setup.cmdline(":", { sources = { { name = "cmdline" } }, mapping = cmp.mapping.preset.cmdline({}) })
+cmp.setup.cmdline(
+	":",
+	{ sources = { { name = "cmdline" } }, mapping = cmp.mapping.preset.cmdline({}) }
+)
 cmp.setup.cmdline("/", { sources = { { name = "buffer" } } })
 
 return {
@@ -13,7 +16,10 @@ return {
 			if cmp.visible() then
 				cmp.select_next_item()
 			elseif vim.fn["vsnip#available"](1) ~= 0 then
-				vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<Plug>(vsnip-expand-or-jump)", true, true, true), "")
+				vim.fn.feedkeys(
+					vim.api.nvim_replace_termcodes("<Plug>(vsnip-expand-or-jump)", true, true, true),
+					""
+				)
 			else
 				fallback()
 			end
@@ -22,7 +28,10 @@ return {
 			if cmp.visible() then
 				cmp.select_prev_item()
 			elseif vim.fn["vsnip#available"](1) ~= 0 then
-				vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<Plug>(vsnip-jump-prev)", true, true, true), "")
+				vim.fn.feedkeys(
+					vim.api.nvim_replace_termcodes("<Plug>(vsnip-jump-prev)", true, true, true),
+					""
+				)
 			else
 				fallback()
 			end

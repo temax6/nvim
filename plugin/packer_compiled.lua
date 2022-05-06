@@ -74,11 +74,6 @@ _G.packer_plugins = {
     path = "/home/toby/.local/share/nvim/site/pack/packer/start/Comment.nvim",
     url = "https://github.com/numToStr/Comment.nvim"
   },
-  ["auto-session"] = {
-    loaded = true,
-    path = "/home/toby/.local/share/nvim/site/pack/packer/start/auto-session",
-    url = "https://github.com/rmagatti/auto-session"
-  },
   ["bufdelete.nvim"] = {
     loaded = true,
     path = "/home/toby/.local/share/nvim/site/pack/packer/start/bufdelete.nvim",
@@ -164,6 +159,11 @@ _G.packer_plugins = {
     path = "/home/toby/.local/share/nvim/site/pack/packer/start/nvim-lspconfig",
     url = "https://github.com/neovim/nvim-lspconfig"
   },
+  ["nvim-tree.lua"] = {
+    loaded = true,
+    path = "/home/toby/.local/share/nvim/site/pack/packer/start/nvim-tree.lua",
+    url = "https://github.com/kyazdani42/nvim-tree.lua"
+  },
   ["nvim-treesitter"] = {
     loaded = true,
     path = "/home/toby/.local/share/nvim/site/pack/packer/start/nvim-treesitter",
@@ -189,11 +189,6 @@ _G.packer_plugins = {
     path = "/home/toby/.local/share/nvim/site/pack/packer/start/plenary.nvim",
     url = "https://github.com/nvim-lua/plenary.nvim"
   },
-  ["session-lens"] = {
-    loaded = true,
-    path = "/home/toby/.local/share/nvim/site/pack/packer/start/session-lens",
-    url = "https://github.com/rmagatti/session-lens"
-  },
   ["telescope.nvim"] = {
     loaded = true,
     path = "/home/toby/.local/share/nvim/site/pack/packer/start/telescope.nvim",
@@ -203,6 +198,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/toby/.local/share/nvim/site/pack/packer/start/toggleterm.nvim",
     url = "https://github.com/akinsho/toggleterm.nvim"
+  },
+  ["trouble.nvim"] = {
+    loaded = true,
+    path = "/home/toby/.local/share/nvim/site/pack/packer/start/trouble.nvim",
+    url = "https://github.com/folke/trouble.nvim"
   },
   ["vim-illuminate"] = {
     loaded = true,

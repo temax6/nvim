@@ -16,6 +16,7 @@ local ret = packer.startup(function(use)
 		"akinsho/toggleterm.nvim",
 		"bluz71/vim-moonfly-colors",
 		"famiu/bufdelete.nvim",
+		"folke/trouble.nvim",
 		"hrsh7th/cmp-buffer",
 		"hrsh7th/cmp-cmdline",
 		"hrsh7th/cmp-nvim-lsp",
@@ -26,6 +27,7 @@ local ret = packer.startup(function(use)
 		"hrsh7th/vim-vsnip-integ",
 		"jose-elias-alvarez/null-ls.nvim",
 		"jose-elias-alvarez/nvim-lsp-ts-utils",
+		"kyazdani42/nvim-tree.lua",
 		"kyazdani42/nvim-web-devicons",
 		"lewis6991/gitsigns.nvim",
 		"lewis6991/impatient.nvim",
@@ -38,9 +40,10 @@ local ret = packer.startup(function(use)
 		"nvim-treesitter/nvim-treesitter",
 		"p00f/nvim-ts-rainbow",
 		"rafamadriz/friendly-snippets",
-		"rmagatti/auto-session",
-		"rmagatti/session-lens",
 		"wbthomason/packer.nvim",
+		-- "nvim-telescope/telescope-file-browser.nvim",
+		-- "rmagatti/auto-session",
+		-- "rmagatti/session-lens",
 		-- "windwp/nvim-autopairs",
 	}
 
@@ -52,43 +55,5 @@ local ret = packer.startup(function(use)
 		packer.sync()
 	end
 end)
-
-local cfg = require("cfg.cfg")
-for k, v in pairs(cfg.setup) do
-	require(k).setup(v)
-end
-
-local binds = require("cfg.binds")
-for k, v in pairs(cfg.lsp) do
-	if v.on_attach == nil then
-		v.on_attach = binds
-	else
-		local f = v.on_attach
-		v.on_attach = function(client, bufnr)
-			binds(client, bufnr)
-			f(client, bufnr)
-		end
-	end
-	v.flags = { debounce_text_changes = 150 }
-	v.capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
-	require("lspconfig")[k].setup(v)
-end
-
-local nls = require("null-ls")
-nls.setup({
-	sources = (function()
-		local r = {}
-		for k, v in pairs(cfg.fmt) do
-			table.insert(r, nls.builtins.formatting[k].with(v))
-		end
-		return r
-	end)(),
-
-	-- on_attach = function(client)
-	-- 	if client.resolved_capabilities.document_formatting then
-	-- 		vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_seq_sync()")
-	-- 	end
-	-- end,
-})
 
 return ret
