@@ -12,6 +12,7 @@ local ret = packer.startup(function(use)
 	local plugins = {
 		"RRethy/vim-illuminate",
 		"akinsho/bufferline.nvim",
+		"akinsho/flutter-tools.nvim",
 		"akinsho/toggleterm.nvim",
 		"bluz71/vim-moonfly-colors",
 		"famiu/bufdelete.nvim",
@@ -22,7 +23,7 @@ local ret = packer.startup(function(use)
 		"hrsh7th/cmp-vsnip",
 		"hrsh7th/nvim-cmp",
 		"hrsh7th/vim-vsnip",
-        "hrsh7th/vim-vsnip-integ",
+		"hrsh7th/vim-vsnip-integ",
 		"jose-elias-alvarez/null-ls.nvim",
 		"jose-elias-alvarez/nvim-lsp-ts-utils",
 		"kyazdani42/nvim-web-devicons",

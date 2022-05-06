@@ -7,6 +7,7 @@ M.setup = {
 	},
 	bufferline = {},
 	Comment = {},
+	-- ["flutter-tools"] = {lsp = {autostart = true}},
 	gitsigns = {},
 	cmp = require("cfg.comp"),
 	indent_blankline = { check_ts = true },
@@ -58,7 +59,8 @@ M.setup = {
 }
 
 M.lsp = {
-	-- jdtls = {},
+	jdtls = { cmd = { "jdtls" } },
+	-- java_language_server = { cmd = { "java-language-server" } },
 	-- eslint = {},
 	bashls = {},
 	clangd = {},
