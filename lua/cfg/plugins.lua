@@ -41,6 +41,7 @@ local ret = packer.startup(function(use)
 		"p00f/nvim-ts-rainbow",
 		"rafamadriz/friendly-snippets",
 		"wbthomason/packer.nvim",
+        "ggandor/leap.nvim",
 	}
 
 	for i in pairs(plugins) do

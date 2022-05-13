@@ -3,7 +3,6 @@ return {
 	Comment = {},
 	-- ["flutter-tools"] = {lsp = {autostart = true}},
 	gitsigns = {},
-
 	cmp = function(cmp)
 		cmp.setup.cmdline(
 			":",
@@ -72,6 +71,9 @@ return {
 		}
 	end,
 	indent_blankline = { check_ts = true },
+	leap = {
+		safe_labels = { "s", "S" },
+	},
 	lualine = {
 		options = { theme = "moonfly" },
 	},
