@@ -62,7 +62,7 @@ local maps = {
 		{ c "e",        tel "git_files hidden=true"                             },
 		{ c "o",        tel "find_files hidden=true"                            },
 		{ c "f",        cmd "NvimTreeToggle"                                    },
-		{ c "k",        tel "oldfiles"                                          },
+		{ c "y",        tel "oldfiles"                                          },
 		{ l "t",        tel "builtin"                                           },
 		{ l "n",        cmd "tab split"                                         },
 		{ c "n",            "gt"                                                },
@@ -78,6 +78,8 @@ local maps = {
 		{ "L",          "$",                                        opts = re   },
 		{ l "/",        "gc",                                       opts = re   },
 		{ l "c",        '"*y'                                                   },
+		{ "f",              "<Plug>(leap-forward)"                              },
+		{ "F",              "<Plug>(leap-backward)"                             },
 	},
 	block = {
 		{ l "c",        '"*y'                                                   },

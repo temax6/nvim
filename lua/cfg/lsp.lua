@@ -4,7 +4,7 @@ return {
 	-- eslint = {},
 	bashls = {},
 	clangd = {},
-	dartls = {},
+	dartls = { flags = { debounce_text_changes = 1000 } },
 	gopls = {},
 	hls = {},
 	html = {

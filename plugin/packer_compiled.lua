@@ -109,10 +109,10 @@ _G.packer_plugins = {
     path = "/home/toby/.local/share/nvim/site/pack/packer/start/cmp-vsnip",
     url = "https://github.com/hrsh7th/cmp-vsnip"
   },
-  ["flutter-tools.nvim"] = {
+  ["dart-vim-plugin"] = {
     loaded = true,
-    path = "/home/toby/.local/share/nvim/site/pack/packer/start/flutter-tools.nvim",
-    url = "https://github.com/akinsho/flutter-tools.nvim"
+    path = "/home/toby/.local/share/nvim/site/pack/packer/start/dart-vim-plugin",
+    url = "https://github.com/dart-lang/dart-vim-plugin"
   },
   ["friendly-snippets"] = {
     loaded = true,
@@ -123,6 +123,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/toby/.local/share/nvim/site/pack/packer/start/gitsigns.nvim",
     url = "https://github.com/lewis6991/gitsigns.nvim"
+  },
+  ["guess-indent.nvim"] = {
+    loaded = true,
+    path = "/home/toby/.local/share/nvim/site/pack/packer/start/guess-indent.nvim",
+    url = "https://github.com/NMAC427/guess-indent.nvim"
   },
   ["impatient.nvim"] = {
     loaded = true,
@@ -148,6 +153,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/toby/.local/share/nvim/site/pack/packer/start/null-ls.nvim",
     url = "https://github.com/jose-elias-alvarez/null-ls.nvim"
+  },
+  ["nvim-autopairs"] = {
+    loaded = true,
+    path = "/home/toby/.local/share/nvim/site/pack/packer/start/nvim-autopairs",
+    url = "https://github.com/windwp/nvim-autopairs"
   },
   ["nvim-cmp"] = {
     loaded = true,

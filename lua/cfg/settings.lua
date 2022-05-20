@@ -37,6 +37,7 @@ for k, v in pairs(options) do
 	vim.opt[k] = v
 end
 
+vim.g.dart_style_guide = 2
 vim.diagnostic.config({ virtual_text = false })
 vim.g.do_filetype_lua = 1
 vim.g.vsnip_filetypes = { dart = { "flutter" } }

@@ -1,5 +1,12 @@
 local binds = require("cfg.binds")
-local plugconf = require("cfg.plugconf")
+local cmp = require("cmp_nvim_lsp")
+
+local lsp_settings = {
+	on_attach = binds,
+	capabilities = cmp.update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+}
+
+local plugconf = require("cfg.plugconf")(lsp_settings)
 
 for k, v in pairs(plugconf) do
 	local plug = require(k)
@@ -13,17 +20,17 @@ end
 
 for k, v in pairs(require("cfg.lsp")) do
 	if v.on_attach == nil then
-		v.on_attach = binds
+		v.on_attach = lsp_settings.on_attach
 	else
 		local f = v.on_attach
 		v.on_attach = function(client, bufnr)
-			binds(client, bufnr)
+			lsp_settings.on_attach(client, bufnr)
 			f(client, bufnr)
 		end
 	end
-	v.flags = { debounce_text_changes = 150 }
-	v.capabilities = require("cmp_nvim_lsp").update_capabilities(
-		vim.lsp.protocol.make_client_capabilities()
-	)
+	if v.flags == nil then
+		v.flags = { debounce_text_changes = 150 }
+	end
+	v.capabilities = lsp_settings.capabilities
 	require("lspconfig")[k].setup(v)
 end

@@ -10,13 +10,15 @@ packer.init({
 
 local ret = packer.startup(function(use)
 	local plugins = {
+		"NMAC427/guess-indent.nvim",
 		"RRethy/vim-illuminate",
 		"akinsho/bufferline.nvim",
-		"akinsho/flutter-tools.nvim",
 		"akinsho/toggleterm.nvim",
 		"bluz71/vim-moonfly-colors",
+		"dart-lang/dart-vim-plugin",
 		"famiu/bufdelete.nvim",
 		"folke/trouble.nvim",
+		"ggandor/leap.nvim",
 		"hrsh7th/cmp-buffer",
 		"hrsh7th/cmp-cmdline",
 		"hrsh7th/cmp-nvim-lsp",
@@ -41,7 +43,8 @@ local ret = packer.startup(function(use)
 		"p00f/nvim-ts-rainbow",
 		"rafamadriz/friendly-snippets",
 		"wbthomason/packer.nvim",
-        "ggandor/leap.nvim",
+		"windwp/nvim-autopairs",
+		-- "akinsho/flutter-tools.nvim",
 	}
 
 	for i in pairs(plugins) do
