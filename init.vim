@@ -7,14 +7,13 @@ endif
 call plug#begin()
 "sort
 Plug 'RRethy/vim-illuminate'
+Plug 'akinsho/toggleterm.nvim'
 Plug 'bluz71/vim-moonfly-colors'
 Plug 'famiu/bufdelete.nvim'
 Plug 'folke/which-key.nvim'
-Plug 'jiangmiao/auto-pairs'
 Plug 'lewis6991/gitsigns.nvim'
 Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'mhartington/formatter.nvim'
-Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
 Plug 'ms-jpq/coq.artifacts', {'branch': 'artifacts'}
 Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
 Plug 'neovim/nvim-lspconfig',
@@ -24,6 +23,7 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'williamboman/nvim-lsp-installer'
+Plug 'windwp/nvim-autopairs'
 "sort
 
 "sort
@@ -61,12 +61,8 @@ function! Sort()
 	call feedkeys("\<C-o>")
 endfunction
 
-au BufWritePre *.vim call feedkeys("gg=G\<C-o>")
 au BufWritePre init.vim call Sort()
-augroup FormatAutogroup
-	autocmd!
-	autocmd BufWritePost * FormatWrite
-augroup END
+au BufWritePre *.vim call feedkeys("gg=G\<C-o>")
 
 "sort
 let g:coq_settings = { 'auto_start': 'shut-up', 'keymap.jump_to_mark': '', 'display.pum.fast_close': v:false }
@@ -94,13 +90,13 @@ vmap H ^
 vmap L $
 "sort
 "sort
-nnoremap <leader>, gcc
+nmap <leader>, gcc
 nnoremap <leader>Q :qa!<CR>
 nnoremap <leader>W :w !sudo tee %<CR>
 nnoremap <leader>a :lua vim.lsp.buf.code_action()<CR>
 nnoremap <leader>c :Bd!<CR>
 nnoremap <leader>d :lua vim.diagnostic.open_float()<CR>
-nnoremap <leader>f :CHADopen<CR>
+nnoremap <leader>f :FormatWrite<CR>
 nnoremap <leader>gd :lua vim.lsp.buf.definition()<CR>
 nnoremap <leader>h :lua vim.lsp.buf.hover()<CR>
 nnoremap <leader>l :noh<CR>
@@ -160,5 +156,7 @@ set title
 set undofile
 set updatetime=300
 "sort
+
+lua vim.diagnostic.config({ virtual_text = false })
 
 lua require("plug")
