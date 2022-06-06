@@ -18,15 +18,19 @@ packer.init({
 			return require("packer.util").float({ border = "rounded" })
 		end,
 	},
+	profile = {
+		enable = true,
+		threshold = 0,
+	},
 })
 
 -- plugin list
 packer.startup(function(use)
 	for _, plugin in pairs({
 		"RRethy/vim-illuminate",
+		"akinsho/bufferline.nvim",
 		"akinsho/toggleterm.nvim",
 		"bluz71/vim-moonfly-colors",
-		"dart-lang/dart-vim-plugin",
 		"famiu/bufdelete.nvim",
 		"folke/which-key.nvim",
 		"hrsh7th/cmp-buffer",
@@ -37,19 +41,23 @@ packer.startup(function(use)
 		"hrsh7th/nvim-cmp",
 		"hrsh7th/vim-vsnip",
 		"hrsh7th/vim-vsnip-integ",
+		"kyazdani42/nvim-web-devicons",
 		"lewis6991/gitsigns.nvim",
+		"lewis6991/impatient.nvim",
 		"lukas-reineke/indent-blankline.nvim",
 		"mhartington/formatter.nvim",
 		"neovim/nvim-lspconfig",
+		"numToStr/Comment.nvim",
 		"nvim-lua/plenary.nvim",
+		"nvim-lualine/lualine.nvim",
 		"nvim-telescope/telescope.nvim",
 		"nvim-treesitter/nvim-treesitter",
 		"rafamadriz/friendly-snippets",
-		"tpope/vim-commentary",
 		"tpope/vim-surround",
 		"wbthomason/packer.nvim",
 		"williamboman/nvim-lsp-installer",
 		"windwp/nvim-autopairs",
+		{ "dart-lang/dart-vim-plugin", ft = { "dart" } },
 	}) do
 		use(plugin)
 	end
@@ -76,10 +84,11 @@ o.number = true
 o.numberwidth = 4
 o.pumheight = 10
 o.relativenumber = true
+o.ruler = true
 o.scrolloff = 999
 o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal"
 o.shiftwidth = 4
-o.shortmess = vim.o.shortmess .. "c"
+o.shortmess = o.shortmess .. "c"
 o.showmode = false
 o.showtabline = 2
 o.sidescrolloff = 2
@@ -88,11 +97,11 @@ o.smartcase = true
 o.smartindent = true
 o.splitbelow = true
 o.splitright = true
-o.statusline = vim.o.statusline .. "%F"
 o.swapfile = false
+-- o.tabline = o.tabline .. "%F"
 o.tabstop = 4
 o.termguicolors = true
-o.timeoutlen = 100
+o.timeoutlen = 250
 o.title = true
 o.undofile = true
 o.updatetime = 300
@@ -105,14 +114,7 @@ vim.g.vsnip_filetypes = { dart = { "flutter" } }
 -- vimscript
 vim.cmd([[
     autocmd BufWritePost *.tex silent! !latexmk -pdf && latexmk -c && pkill -HUP mupdf
-
-	syntax on
-	filetype plugin indent on
 	colorscheme moonfly
-	hi StatusLine guibg=bg
-	hi StatusLineNC guibg=bg
-	hi TabLine guibg=bg
-	hi TabLineFill guibg=bg
 	hi TabLineSel guibg=bg
 ]])
 
@@ -142,25 +144,25 @@ map("n", "<leader>,", "gcc")
 map("n", "<leader>Q", ":qa!<CR>")
 map("n", "<leader>W", ":w !sudo tee %<CR>")
 map("n", "<leader>a", ":lua vim.lsp.buf.code_action()<CR>")
+map("n", "<leader>b", ":Telescope buffers<CR>")
 map("n", "<leader>c", ":Bd!<CR>")
 map("n", "<leader>d", ":lua vim.diagnostic.open_float()<CR>")
 map("n", "<leader>f", ":FormatWrite<CR>")
-map("n", "<leader>gd", ":lua vim.lsp.buf.definition()<CR>")
+map("n", "<leader>ff", ":Telescope find_files hidden=true<CR>")
+map("n", "<leader>g", ":Telescope lsp_definitions<CR>")
+map("n", "<leader>gf", ":Telescope git_files hidden=true<CR>")
 map("n", "<leader>h", ":lua vim.lsp.buf.hover()<CR>")
 map("n", "<leader>l", ":noh<CR>")
 map("n", "<leader>m", ":messages<CR>")
 map("n", "<leader>n", ":tab split<CR>")
+map("n", "<leader>of", ":Telescope oldfiles<CR>")
 map("n", "<leader>pdf", ":silent! !mupdf %:p:r.pdf &<CR>")
 map("n", "<leader>ps", ":PackerSync<CR>")
 map("n", "<leader>q", ":q!<CR>")
 map("n", "<leader>r", ":lua vim.lsp.buf.rename()<CR>")
 map("n", "<leader>so", ":so %<CR>")
-map("n", "<leader>tb", ":Telescope buffers<CR>")
+map("n", "<leader>tb", ":Telescope current_buffer_fuzzy_find<CR>")
 map("n", "<leader>td", ":Telescope diagnostics<CR>")
-map("n", "<leader>tfb", ":Telescope current_buffer_fuzzy_find<CR>")
-map("n", "<leader>tff", ":Telescope find_files hidden=true<CR>")
-map("n", "<leader>tgf", ":Telescope git_files hidden=true<CR>")
-map("n", "<leader>tof", ":Telescope oldfiles<CR>")
 map("n", "<leader>tt", ":Telescope builtin<CR>")
 map("n", "<leader>w", ":w!<CR>")
 map("n", "<leader>x", ":tabclose!<CR>")
@@ -171,10 +173,30 @@ map("n", "L", "$")
 map("n", "M", "'")
 map("n", "Y", "y$")
 
--- plugin implementations
+-- -- plugin implementations
+require("Comment").setup()
 require("gitsigns").setup()
 require("nvim-autopairs").setup()
 require("nvim-lsp-installer").setup({ automatic_installation = true })
+
+require("bufferline").setup({
+	-- options = {
+	-- 	mode = "tabs",
+	-- },
+})
+
+require("lualine").setup({
+	options = { theme = "moonfly" },
+})
+
+local wk = require("which-key")
+local show = wk.show
+wk.show = function(keys, opts)
+	if vim.bo.filetype == "TelescopePrompt" then
+		return
+	end
+	show(keys, opts)
+end
 require("which-key").setup()
 
 require("nvim-treesitter.configs").setup({
