@@ -272,7 +272,7 @@ require("nvim-treesitter.configs").setup({
 	},
 })
 require("tabline").setup({
-	no_name = "[]"
+	no_name = "[]",
 })
 require("telescope").setup({
 	defaults = {
