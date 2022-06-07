@@ -1,3 +1,45 @@
+local function map(mode, from, to, opts)
+	vim.api.nvim_set_keymap(mode, from, to, opts or { silent = true })
+end
+-- stylua: ignore start
+local function imap(from, to, opts) map("i", from, to, opts) end
+local function nmap(from, to, opts) map("n", from, to, opts) end
+local function vmap(from, to, opts) map("v", from, to, opts) end
+local function xmap(from, to, opts) map("x", from, to, opts) end
+-- stylua: ignore end
+
+function nvfmt()
+	if vim.fn.expand("%") == "init.lua" then
+		local ln = vim.api.nvim_win_get_cursor(0)
+		local lines = vim.api.nvim_buf_get_lines(0, 0, vim.api.nvim_buf_line_count(0), false)
+		local did = false
+		local cmd_start = -1
+		local sort_start = -1
+		for i, line in ipairs(lines) do
+			if string.match(line, "-- " .. "sort") == "-- " .. "sort" then
+				if sort_start == -1 then
+					sort_start = i + 1
+				else
+					vim.cmd(" :" .. sort_start .. "," .. i - 1 .. "sort")
+					sort_start = -1
+					did = true
+				end
+			elseif string.match(line, "-- " .. ":") == "-- " .. ":" then
+				if cmd_start == -1 then
+					cmd_start = i + 1
+				else
+					vim.cmd(":" .. cmd_start .. "," .. i - 1 .. string.sub(line, string.find(line, ":") + 1))
+					cmd_start = -1
+					did = true
+				end
+			end
+		end
+		if did then
+			vim.cmd(":" .. ln[1])
+		end
+	end
+end
+
 local install_path = vim.fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
 	PACKER_BOOTSTRAP = vim.fn.system({
@@ -24,13 +66,13 @@ packer.init({
 	},
 })
 
--- plugin list
 packer.startup(function(use)
 	for _, plugin in pairs({
+		-- sort
 		"RRethy/vim-illuminate",
-		"akinsho/bufferline.nvim",
 		"akinsho/toggleterm.nvim",
 		"bluz71/vim-moonfly-colors",
+		"crispgm/nvim-tabline",
 		"famiu/bufdelete.nvim",
 		"folke/which-key.nvim",
 		"hrsh7th/cmp-buffer",
@@ -41,6 +83,7 @@ packer.startup(function(use)
 		"hrsh7th/nvim-cmp",
 		"hrsh7th/vim-vsnip",
 		"hrsh7th/vim-vsnip-integ",
+		"junegunn/vim-easy-align",
 		"kyazdani42/nvim-web-devicons",
 		"lewis6991/gitsigns.nvim",
 		"lewis6991/impatient.nvim",
@@ -58,6 +101,7 @@ packer.startup(function(use)
 		"williamboman/nvim-lsp-installer",
 		"windwp/nvim-autopairs",
 		{ "dart-lang/dart-vim-plugin", ft = { "dart" } },
+		-- sort
 	}) do
 		use(plugin)
 	end
@@ -67,127 +111,115 @@ packer.startup(function(use)
 	end
 end)
 
--- setopts
-local o = vim.o
-
-o.backup = false
-o.clipboard = "unnamedplus"
-o.conceallevel = 0
-o.cursorline = true
-o.fileencoding = "utf-8"
-o.hidden = true
-o.hlsearch = true
-o.ignorecase = true
-o.incsearch = true
-o.mouse = "a"
-o.number = true
-o.numberwidth = 4
-o.pumheight = 10
-o.relativenumber = true
-o.ruler = true
-o.scrolloff = 999
-o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal"
-o.shiftwidth = 4
-o.shortmess = o.shortmess .. "c"
-o.showmode = false
-o.showtabline = 2
-o.sidescrolloff = 2
-o.signcolumn = "yes"
-o.smartcase = true
-o.smartindent = true
-o.splitbelow = true
-o.splitright = true
-o.swapfile = false
--- o.tabline = o.tabline .. "%F"
-o.tabstop = 4
-o.termguicolors = true
-o.timeoutlen = 250
-o.title = true
-o.undofile = true
-o.updatetime = 300
-o.wrap = false
-
-vim.diagnostic.config({ virtual_text = false })
-vim.g.dart_style_guide = 2
-vim.g.vsnip_filetypes = { dart = { "flutter" } }
-
--- vimscript
 vim.cmd([[
-    autocmd BufWritePost *.tex silent! !latexmk -pdf && latexmk -c && pkill -HUP mupdf
-	colorscheme moonfly
-	hi TabLineSel guibg=bg
+au BufWritePost *.tex silent! !latexmk -pdf && latexmk -c && pkill -HUP mupdf
+au User FormatterPost :lua nvfmt()
+colorscheme moonfly
+hi TabLine guibg=bg
+hi TabLineFill guibg=bg
+hi TabLineSel guibg=bg
 ]])
 
--- mapping
-local function map(mode, from, to, opts)
-	vim.api.nvim_set_keymap(mode, from, to, opts or { silent = true })
-end
-vim.g.mapleader = " "
+-- :
+-- sort
+vim.o.backup                         = false
+vim.o.clipboard                      = "unnamedplus"
+vim.o.conceallevel                   = 0
+vim.o.cursorline                     = true
+vim.o.fileencoding                   = "utf-8"
+vim.o.hidden                         = true
+vim.o.hlsearch                       = true
+vim.o.ignorecase                     = true
+vim.o.incsearch                      = true
+vim.o.mouse                          = "a"
+vim.o.number                         = true
+vim.o.numberwidth                    = 4
+vim.o.pumheight                      = 10
+vim.o.relativenumber                 = true
+vim.o.ruler                          = true
+vim.o.scrolloff                      = 999
+vim.o.sessionoptions                 = vim.o.ssop .. ",winpos,terminal"
+vim.o.shiftwidth                     = 4
+vim.o.shortmess                      = vim.o.shm .. "c"
+vim.o.showmode                       = false
+vim.o.showtabline                    = 2
+vim.o.sidescrolloff                  = 2
+vim.o.signcolumn                     = "yes"
+vim.o.smartcase                      = true
+vim.o.smartindent                    = true
+vim.o.splitbelow                     = true
+vim.o.splitright                     = true
+vim.o.swapfile                       = false
+vim.o.tabstop                        = 4
+vim.o.termguicolors                  = true
+vim.o.timeoutlen                     = 250
+vim.o.title                          = true
+vim.o.undofile                       = true
+vim.o.updatetime                     = 300
+vim.o.wrap                           = false
+-- sort
+
+-- sort
+vim.diagnostic.config({ virtual_text = false })
+vim.g.dart_style_guide               = 2
+vim.g.vsnip_filetypes                = { dart = { "flutter" } }
+-- sort
+-- :EasyAlign =
+
+-- :
+vim.g.mapleader      = " "
 vim.g.localmapleader = " "
+-- :EasyAlign =
 
--- insert
-map("i", "jk", "<ESC>")
-
--- visual
-map("v", "<leader>,", "gc")
-map("v", "H", "^")
-map("v", "L", "$")
-
--- normal
-map("n", "<C-h>", "<C-w>h")
-map("n", "<C-j>", "<C-w>j")
-map("n", "<C-k>", "<C-w>k")
-map("n", "<C-l>", "<C-w>l")
-map("n", "<C-n>", "gt")
-map("n", "<C-p>", "gT")
-map("n", "<leader>,", "gcc")
-map("n", "<leader>Q", ":qa!<CR>")
-map("n", "<leader>W", ":w !sudo tee %<CR>")
-map("n", "<leader>a", ":lua vim.lsp.buf.code_action()<CR>")
-map("n", "<leader>b", ":Telescope buffers<CR>")
-map("n", "<leader>c", ":Bd!<CR>")
-map("n", "<leader>d", ":lua vim.diagnostic.open_float()<CR>")
-map("n", "<leader>f", ":FormatWrite<CR>")
-map("n", "<leader>ff", ":Telescope find_files hidden=true<CR>")
-map("n", "<leader>g", ":Telescope lsp_definitions<CR>")
-map("n", "<leader>gf", ":Telescope git_files hidden=true<CR>")
-map("n", "<leader>h", ":lua vim.lsp.buf.hover()<CR>")
-map("n", "<leader>l", ":noh<CR>")
-map("n", "<leader>m", ":messages<CR>")
-map("n", "<leader>n", ":tab split<CR>")
-map("n", "<leader>of", ":Telescope oldfiles<CR>")
-map("n", "<leader>pdf", ":silent! !mupdf %:p:r.pdf &<CR>")
-map("n", "<leader>ps", ":PackerSync<CR>")
-map("n", "<leader>q", ":q!<CR>")
-map("n", "<leader>r", ":lua vim.lsp.buf.rename()<CR>")
-map("n", "<leader>so", ":so %<CR>")
-map("n", "<leader>tb", ":Telescope current_buffer_fuzzy_find<CR>")
-map("n", "<leader>td", ":Telescope diagnostics<CR>")
-map("n", "<leader>tt", ":Telescope builtin<CR>")
-map("n", "<leader>w", ":w!<CR>")
-map("n", "<leader>x", ":tabclose!<CR>")
-map("n", "H", "^")
-map("n", "J", ":bn<CR>")
-map("n", "K", ":bp<CR>")
-map("n", "L", "$")
-map("n", "M", "'")
-map("n", "Y", "y$")
-
--- -- plugin implementations
-require("Comment").setup()
-require("gitsigns").setup()
-require("nvim-autopairs").setup()
-require("nvim-lsp-installer").setup({ automatic_installation = true })
-
-require("bufferline").setup({
-	-- options = {
-	-- 	mode = "tabs",
-	-- },
-})
-
-require("lualine").setup({
-	options = { theme = "moonfly" },
-})
+-- :
+-- sort
+imap("jk",          "<ESC>")
+nmap("<C-h>",       "<C-w>h")
+nmap("<C-j>",       "<C-w>j")
+nmap("<C-k>",       "<C-w>k")
+nmap("<C-l>",       "<C-w>l")
+nmap("<C-n>",       ":bn<CR>")
+nmap("<C-p>",       ":bp<CR>")
+nmap("<leader>,",   "gcc")
+nmap("<leader>Q",   ":qa!<CR>")
+nmap("<leader>W",   ":w !sudo tee %<CR>")
+nmap("<leader>a",   ":lua vim.lsp.buf.code_action()<CR>")
+nmap("<leader>b",   ":Telescope buffers<CR>")
+nmap("<leader>c",   ":Bd!<CR>")
+nmap("<leader>d",   ":lua vim.diagnostic.open_float()<CR>")
+nmap("<leader>f",   ":Format<CR>")
+nmap("<leader>gd",  ":Telescope lsp_definitions<CR>")
+nmap("<leader>gf",  ":Telescope git_files hidden=true<CR>")
+nmap("<leader>h",   ":lua vim.lsp.buf.hover()<CR>")
+nmap("<leader>l",   ":noh<CR>")
+nmap("<leader>mk",  ":mksession!<CR>")
+nmap("<leader>ms",  ":messages<CR>")
+nmap("<leader>n",   ":tab split<CR>")
+nmap("<leader>of",  ":Telescope oldfiles<CR>")
+nmap("<leader>pdf", ":silent! !mupdf %:p:r.pdf &<CR>")
+nmap("<leader>ps",  ":PackerSync<CR>")
+nmap("<leader>q",   ":q!<CR>")
+nmap("<leader>r",   ":lua vim.lsp.buf.rename()<CR>")
+nmap("<leader>so",  ":so %<CR>")
+nmap("<leader>tb",  ":Telescope current_buffer_fuzzy_find<CR>")
+nmap("<leader>td",  ":Telescope diagnostics<CR>")
+nmap("<leader>tf",  ":Telescope find_files hidden=true<CR>")
+nmap("<leader>tt",  ":Telescope builtin<CR>")
+nmap("<leader>w",   ":w!<CR>")
+nmap("<leader>x",   ":tabclose!<CR>")
+nmap("H",           "^")
+nmap("J",           "gt")
+nmap("K",           "gT")
+nmap("L",           "$")
+nmap("M",           "'")
+nmap("Y",           "y$")
+nmap("ga",          "<Plug>(EasyAlign)")
+vmap("<leader>,",   "gc")
+vmap("H",           "^")
+vmap("L",           "$")
+xmap("ga",          "<Plug>(EasyAlign)")
+-- sort
+-- :EasyAlign -,
 
 local wk = require("which-key")
 local show = wk.show
@@ -197,35 +229,9 @@ wk.show = function(keys, opts)
 	end
 	show(keys, opts)
 end
-require("which-key").setup()
 
-require("nvim-treesitter.configs").setup({
-	ensure_installed = {
-		"bash",
-		"c",
-		"cpp",
-		"dart",
-		"go",
-		"lua",
-		"python",
-		"rust",
-	},
-	highlight = {
-		enable = true,
-		additional_vim_regex_highlighting = false,
-	},
-})
-
-require("telescope").setup({
-	defaults = {
-		mappings = {
-			n = {
-				["<Leader>q"] = require("telescope.actions").close,
-			},
-		},
-	},
-})
-
+-- isort
+require("Comment").setup()
 require("formatter").setup({
 	filetype = {
 		python = { require("formatter.filetypes.python").autopep8 },
@@ -245,12 +251,45 @@ require("formatter").setup({
 		rust = { require("formatter.filetypes.rust").rustfmt },
 	},
 })
-
+require("gitsigns").setup()
+require("lualine").setup({ options = { theme = "moonfly" } })
+require("nvim-autopairs").setup()
+require("nvim-lsp-installer").setup({ automatic_installation = true })
+require("nvim-treesitter.configs").setup({
+	ensure_installed = {
+		"bash",
+		"c",
+		"cpp",
+		"dart",
+		"go",
+		"lua",
+		"python",
+		"rust",
+	},
+	highlight = {
+		enable = true,
+		additional_vim_regex_highlighting = false,
+	},
+})
+require("tabline").setup({
+	no_name = "[]"
+})
+require("telescope").setup({
+	defaults = {
+		mappings = {
+			n = {
+				["<Leader>q"] = require("telescope.actions").close,
+			},
+		},
+	},
+})
 require("toggleterm").setup({
 	open_mapping = [[<C-t>]],
 	insert_mapping = false,
 	direction = "float",
 })
+require("which-key").setup()
+-- isort
 
 local cmp = require("cmp")
 cmp.setup.cmdline(":", { sources = { { name = "cmdline" } }, mapping = cmp.mapping.preset.cmdline({}) })
@@ -307,7 +346,6 @@ cmp.setup({
 	}),
 })
 
--- lsp
 local cmp_capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
 local lsp = require("lspconfig")
 local function setup(server, cfg)
