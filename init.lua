@@ -143,7 +143,7 @@ vim.o.shiftwidth                     = 4
 vim.o.shortmess                      = vim.o.shm .. "c"
 vim.o.showmode                       = false
 vim.o.showtabline                    = 2
-vim.o.sidescrolloff                  = 2
+vim.o.sidescrolloff                  = 999
 vim.o.signcolumn                     = "yes"
 vim.o.smartcase                      = true
 vim.o.smartindent                    = true
@@ -162,6 +162,8 @@ vim.o.wrap                           = false
 -- sort
 vim.diagnostic.config({ virtual_text = false })
 vim.g.dart_style_guide               = 2
+vim.g.mscrolloff                     = vim.o.scrolloff
+vim.g.msidescrolloff                 = vim.o.sidescrolloff
 vim.g.vsnip_filetypes                = { dart = { "flutter" } }
 -- sort
 -- :EasyAlign =
@@ -188,7 +190,7 @@ nmap("<leader>b",   ":Telescope buffers<CR>")
 nmap("<leader>c",   ":Bd!<CR>")
 nmap("<leader>d",   ":lua vim.diagnostic.open_float()<CR>")
 nmap("<leader>f",   ":Format<CR>")
-nmap("<leader>gd",  ":Telescope lsp_definitions<CR>")
+nmap("<leader>gd",  [[:lua require "telescope.builtin".lsp_definitions { jump_type = "never" })<CR>]])
 nmap("<leader>gf",  ":Telescope git_files hidden=true<CR>")
 nmap("<leader>h",   ":lua vim.lsp.buf.hover()<CR>")
 nmap("<leader>l",   ":noh<CR>")
@@ -196,11 +198,12 @@ nmap("<leader>mk",  ":mksession!<CR>")
 nmap("<leader>ms",  ":messages<CR>")
 nmap("<leader>n",   ":tab split<CR>")
 nmap("<leader>of",  ":Telescope oldfiles<CR>")
+nmap("<leader>os",  ":so %<CR>")
 nmap("<leader>pdf", ":silent! !mupdf %:p:r.pdf &<CR>")
 nmap("<leader>ps",  ":PackerSync<CR>")
 nmap("<leader>q",   ":q!<CR>")
 nmap("<leader>r",   ":lua vim.lsp.buf.rename()<CR>")
-nmap("<leader>so",  ":so %<CR>")
+nmap("<leader>s",   ":let &scrolloff=mscrolloff-&scrolloff<CR>:let &sidescrolloff=msidescrolloff-&sidescrolloff<CR>")
 nmap("<leader>tb",  ":Telescope current_buffer_fuzzy_find<CR>")
 nmap("<leader>td",  ":Telescope diagnostics<CR>")
 nmap("<leader>tf",  ":Telescope find_files hidden=true<CR>")
@@ -361,6 +364,7 @@ setup("clangd")
 setup("dartls", { flags = { debounce_text_changes = 1000 } })
 setup("gopls")
 setup("pyright")
+setup("rust_analyzer")
 setup("sumneko_lua", {
 	settings = {
 		Lua = {
