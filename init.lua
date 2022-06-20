@@ -101,6 +101,7 @@ packer.startup(function(use)
 		"williamboman/nvim-lsp-installer",
 		"windwp/nvim-autopairs",
 		{ "dart-lang/dart-vim-plugin", ft = { "dart" } },
+		{ "mfussenegger/nvim-jdtls", ft = { "java" } },
 		-- sort
 	}) do
 		use(plugin)
@@ -114,6 +115,7 @@ end)
 vim.cmd([[
 au BufWritePost *.tex silent! !latexmk -pdf && latexmk -c && pkill -HUP mupdf
 au User FormatterPost :lua nvfmt()
+au VimResized * wincmd =
 colorscheme moonfly
 hi TabLine guibg=bg
 hi TabLineFill guibg=bg
@@ -143,7 +145,7 @@ vim.o.shiftwidth                     = 4
 vim.o.shortmess                      = vim.o.shm .. "c"
 vim.o.showmode                       = false
 vim.o.showtabline                    = 2
-vim.o.sidescrolloff                  = 999
+vim.o.sidescrolloff                  = 8
 vim.o.signcolumn                     = "yes"
 vim.o.smartcase                      = true
 vim.o.smartindent                    = true
@@ -190,7 +192,7 @@ nmap("<leader>b",   ":Telescope buffers<CR>")
 nmap("<leader>c",   ":Bd!<CR>")
 nmap("<leader>d",   ":lua vim.diagnostic.open_float()<CR>")
 nmap("<leader>f",   ":Format<CR>")
-nmap("<leader>gd",  [[:lua require "telescope.builtin".lsp_definitions { jump_type = "never" })<CR>]])
+nmap("<leader>gd",  [[:lua require "telescope.builtin".lsp_definitions { jump_type = "never" }<CR>]])
 nmap("<leader>gf",  ":Telescope git_files hidden=true<CR>")
 nmap("<leader>h",   ":lua vim.lsp.buf.hover()<CR>")
 nmap("<leader>l",   ":noh<CR>")
@@ -239,6 +241,7 @@ require("formatter").setup({
 	filetype = {
 		python = { require("formatter.filetypes.python").autopep8 },
 		c = { require("formatter.filetypes.c").clangformat },
+		cpp = { require("formatter.filetypes.c").clangformat },
 		lua = {
 			require("formatter.filetypes.lua").stylua,
 		},
@@ -251,13 +254,27 @@ require("formatter").setup({
 			end,
 		},
 		go = { require("formatter.filetypes.go").gofumpt },
-		rust = { require("formatter.filetypes.rust").rustfmt },
+		rust = {
+			function()
+				return {
+					exe = "rustfmt",
+					args = { "--edition 2021" },
+					stdin = true,
+				}
+			end,
+		},
 	},
 })
 require("gitsigns").setup()
-require("lualine").setup({ options = { theme = "moonfly" } })
+require("lualine").setup({
+	options = {
+		theme = "moonfly",
+		section_separators = { left = "", right = "" },
+		component_separators = { left = "", right = "" },
+	},
+})
 require("nvim-autopairs").setup()
-require("nvim-lsp-installer").setup({ automatic_installation = true })
+require("nvim-lsp-installer").setup({ automatic_installation = false })
 require("nvim-treesitter.configs").setup({
 	ensure_installed = {
 		"bash",
@@ -265,6 +282,7 @@ require("nvim-treesitter.configs").setup({
 		"cpp",
 		"dart",
 		"go",
+		"java",
 		"lua",
 		"python",
 		"rust",
