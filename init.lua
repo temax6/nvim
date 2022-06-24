@@ -48,15 +48,8 @@ end
 local install_path = vim.fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 if vim.fn.empty(vim.fn.glob(install_path, false, false)) > 0 then
     PACKER_BOOTSTRAP = vim.fn.system(
-                           {
-            "git",
-            "clone",
-            "--depth",
-            "1",
-            "https://github.com/wbthomason/packer.nvim",
-            install_path,
-        }
-                       )
+        { "git", "clone", "--depth", "1", "https://github.com/wbthomason/packer.nvim", install_path }
+    )
 end
 
 local packer = require("packer")
@@ -75,7 +68,7 @@ packer.init(
 packer.startup(
     function(use)
         for _, plugin in pairs(
-                             {
+            {
                 -- sort
                 "RRethy/vim-illuminate",
                 "akinsho/flutter-tools.nvim",
@@ -117,7 +110,7 @@ packer.startup(
                 { "mfussenegger/nvim-jdtls", ft = { "java" } },
                 -- sort
             }
-                         ) do use(plugin) end
+        ) do use(plugin) end
 
         if PACKER_BOOTSTRAP then packer.sync() end
     end
@@ -329,8 +322,8 @@ cmp.setup.cmdline(
 )
 
 local on_confirm_done = require("nvim-autopairs.completion.cmp").on_confirm_done(
-                            { map_char = { tex = "" } }
-                        )
+    { map_char = { tex = "" } }
+)
 cmp.event:on("confirm_done", on_confirm_done)
 
 cmp.setup(
@@ -378,8 +371,8 @@ cmp.setup(
 )
 
 local cmp_capabilities = require("cmp_nvim_lsp").update_capabilities(
-                             vim.lsp.protocol.make_client_capabilities()
-                         )
+    vim.lsp.protocol.make_client_capabilities()
+)
 local lsp = require("lspconfig")
 local function setup(server, cfg)
     local default_cfg = { capabilities = cmp_capabilities }
