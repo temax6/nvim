@@ -47,9 +47,14 @@ end
 
 local install_path = vim.fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 if vim.fn.empty(vim.fn.glob(install_path, false, false)) > 0 then
-    PACKER_BOOTSTRAP = vim.fn.system(
-        { "git", "clone", "--depth", "1", "https://github.com/wbthomason/packer.nvim", install_path }
-    )
+    PACKER_BOOTSTRAP = vim.fn.system{
+        "git",
+        "clone",
+        "--depth",
+        "1",
+        "https://github.com/wbthomason/packer.nvim",
+        install_path,
+     }
 end
 
 local packer = require("packer")
@@ -58,59 +63,59 @@ packer.init(
     {
         display = {
             open_fn = function()
-                return require("packer.util").float({ border = "rounded" })
+                return require("packer.util").float{
+                    border = "rounded",
+                 }
             end,
-        },
+         },
         profile = { enable = true, threshold = 0 },
-    }
+     }
 )
 
 packer.startup(
     function(use)
-        for _, plugin in pairs(
-            {
-                -- sort
-                "RRethy/vim-illuminate",
-                "akinsho/flutter-tools.nvim",
-                "akinsho/toggleterm.nvim",
-                "bluz71/vim-moonfly-colors",
-                "crispgm/nvim-tabline",
-                "famiu/bufdelete.nvim",
-                "folke/lua-dev.nvim",
-                "folke/which-key.nvim",
-                "hrsh7th/cmp-buffer",
-                "hrsh7th/cmp-cmdline",
-                "hrsh7th/cmp-nvim-lsp",
-                "hrsh7th/cmp-path",
-                "hrsh7th/cmp-vsnip",
-                "hrsh7th/nvim-cmp",
-                "hrsh7th/vim-vsnip",
-                "hrsh7th/vim-vsnip-integ",
-                "junegunn/vim-easy-align",
-                "kyazdani42/nvim-web-devicons",
-                "lewis6991/gitsigns.nvim",
-                "lewis6991/impatient.nvim",
-                "lukas-reineke/indent-blankline.nvim",
-                "mhartington/formatter.nvim",
-                "neovim/nvim-lspconfig",
-                "numToStr/Comment.nvim",
-                "nvim-lua/plenary.nvim",
-                "nvim-lualine/lualine.nvim",
-                "nvim-telescope/telescope-ui-select.nvim",
-                "nvim-telescope/telescope.nvim",
-                "nvim-treesitter/nvim-treesitter",
-                "rafamadriz/friendly-snippets",
-                "simrat39/rust-tools.nvim",
-                "smjonas/inc-rename.nvim",
-                "tpope/vim-surround",
-                "wbthomason/packer.nvim",
-                "williamboman/nvim-lsp-installer",
-                "windwp/nvim-autopairs",
-                { "dart-lang/dart-vim-plugin", ft = { "dart" } },
-                { "mfussenegger/nvim-jdtls", ft = { "java" } },
-                -- sort
-            }
-        ) do use(plugin) end
+        for _, plugin in pairs{
+            -- sort
+            "RRethy/vim-illuminate",
+            "akinsho/flutter-tools.nvim",
+            "akinsho/toggleterm.nvim",
+            "bluz71/vim-moonfly-colors",
+            "crispgm/nvim-tabline",
+            "famiu/bufdelete.nvim",
+            "folke/lua-dev.nvim",
+            "folke/which-key.nvim",
+            "hrsh7th/cmp-buffer",
+            "hrsh7th/cmp-cmdline",
+            "hrsh7th/cmp-nvim-lsp",
+            "hrsh7th/cmp-path",
+            "hrsh7th/cmp-vsnip",
+            "hrsh7th/nvim-cmp",
+            "hrsh7th/vim-vsnip",
+            "hrsh7th/vim-vsnip-integ",
+            "junegunn/vim-easy-align",
+            "kyazdani42/nvim-web-devicons",
+            "lewis6991/gitsigns.nvim",
+            "lewis6991/impatient.nvim",
+            "lukas-reineke/indent-blankline.nvim",
+            "mhartington/formatter.nvim",
+            "neovim/nvim-lspconfig",
+            "numToStr/Comment.nvim",
+            "nvim-lua/plenary.nvim",
+            "nvim-lualine/lualine.nvim",
+            "nvim-telescope/telescope-ui-select.nvim",
+            "nvim-telescope/telescope.nvim",
+            "nvim-treesitter/nvim-treesitter",
+            "rafamadriz/friendly-snippets",
+            "simrat39/rust-tools.nvim",
+            "smjonas/inc-rename.nvim",
+            "tpope/vim-surround",
+            "wbthomason/packer.nvim",
+            "williamboman/nvim-lsp-installer",
+            "windwp/nvim-autopairs",
+            { "dart-lang/dart-vim-plugin", ft = { "dart" } },
+            { "mfussenegger/nvim-jdtls", ft = { "java" } },
+            -- sort
+         } do use(plugin) end
 
         if PACKER_BOOTSTRAP then packer.sync() end
     end
@@ -130,49 +135,49 @@ hi TabLineSel guibg=bg
 
 -- :
 -- sort
-vim.o.backup                         = false
-vim.o.clipboard                      = "unnamedplus"
-vim.o.conceallevel                   = 0
-vim.o.cursorline                     = true
-vim.o.fileencoding                   = "utf-8"
-vim.o.hidden                         = true
-vim.o.hlsearch                       = true
-vim.o.ignorecase                     = true
-vim.o.incsearch                      = true
-vim.o.mouse                          = "a"
-vim.o.number                         = true
-vim.o.numberwidth                    = 4
-vim.o.pumheight                      = 10
-vim.o.relativenumber                 = true
-vim.o.ruler                          = true
-vim.o.scrolloff                      = 999
-vim.o.sessionoptions                 = vim.o.ssop .. ",winpos,terminal"
-vim.o.shiftwidth                     = 4
-vim.o.shortmess                      = vim.o.shm .. "c"
-vim.o.showmode                       = false
-vim.o.showtabline                    = 2
-vim.o.sidescrolloff                  = 8
-vim.o.signcolumn                     = "yes"
-vim.o.smartcase                      = true
-vim.o.smartindent                    = true
-vim.o.splitbelow                     = true
-vim.o.splitright                     = true
-vim.o.swapfile                       = false
-vim.o.tabstop                        = 4
-vim.o.termguicolors                  = true
-vim.o.timeoutlen                     = 250
-vim.o.title                          = true
-vim.o.undofile                       = true
-vim.o.updatetime                     = 300
-vim.o.wrap                           = false
+vim.o.backup                        = false
+vim.o.clipboard                     = "unnamedplus"
+vim.o.conceallevel                  = 0
+vim.o.cursorline                    = true
+vim.o.fileencoding                  = "utf-8"
+vim.o.hidden                        = true
+vim.o.hlsearch                      = true
+vim.o.ignorecase                    = true
+vim.o.incsearch                     = true
+vim.o.mouse                         = "a"
+vim.o.number                        = true
+vim.o.numberwidth                   = 4
+vim.o.pumheight                     = 10
+vim.o.relativenumber                = true
+vim.o.ruler                         = true
+vim.o.scrolloff                     = 999
+vim.o.sessionoptions                = vim.o.ssop .. ",winpos,terminal"
+vim.o.shiftwidth                    = 4
+vim.o.shortmess                     = vim.o.shm .. "c"
+vim.o.showmode                      = false
+vim.o.showtabline                   = 2
+vim.o.sidescrolloff                 = 8
+vim.o.signcolumn                    = "yes"
+vim.o.smartcase                     = true
+vim.o.smartindent                   = true
+vim.o.splitbelow                    = true
+vim.o.splitright                    = true
+vim.o.swapfile                      = false
+vim.o.tabstop                       = 4
+vim.o.termguicolors                 = true
+vim.o.timeoutlen                    = 250
+vim.o.title                         = true
+vim.o.undofile                      = true
+vim.o.updatetime                    = 300
+vim.o.wrap                          = false
 -- sort
 
 -- sort
-vim.diagnostic.config({ virtual_text = false })
-vim.g.dart_style_guide               = 2
-vim.g.mscrolloff                     = vim.o.scrolloff
-vim.g.msidescrolloff                 = vim.o.sidescrolloff
-vim.g.vsnip_filetypes                = { dart = { "flutter" } }
+vim.diagnostic.config{ virtual_text = false }
+vim.g.dart_style_guide              = 2
+vim.g.mscrolloff                    = vim.o.scrolloff
+vim.g.msidescrolloff                = vim.o.sidescrolloff
+vim.g.vsnip_filetypes               = { dart = { "flutter" } }
 -- sort
 -- :EasyAlign =
 
@@ -240,95 +245,142 @@ wk.show = function(keys, opts)
 end
 
 -- isort
-require("Comment").setup()
-require("formatter").setup(
-    {
-        filetype = {
-            python = { require("formatter.filetypes.python").autopep8 },
-            c = {
-                function()
-                    return { exe = "uncrustify", args = { "-q", "-l C" }, stdin = true }
-                end,
-            },
-            cpp = {
-                function()
-                    return { exe = "uncrustify", args = { "-q", "-l C" }, stdin = true }
-                end,
-            },
-            lua = { function()
-                return { exe = "lua-format -i", args = { "-i" }, stdin = false }
-            end },
-            dart = { function() return { exe = "flutter format", stdin = false } end },
-            go = { require("formatter.filetypes.go").gofumpt },
-            haskell = { function() return { exe = "fourmolu", stdin = true } end },
-            rust = {
-                function()
-                    return { exe = "rustfmt", args = { "--edition 2021" }, stdin = true }
-                end,
-            },
-        },
-    }
-)
-require("gitsigns").setup()
-require("lualine").setup(
-    {
-        options = {
-            theme = "moonfly",
-            section_separators = { left = "", right = "" },
-            component_separators = { left = "", right = "" },
-        },
-    }
-)
-require("nvim-autopairs").setup()
-require("nvim-lsp-installer").setup({ automatic_installation = false })
-require("nvim-treesitter.configs").setup(
-    {
-        ensure_installed = { "bash", "c", "cpp", "go", "java", "lua", "python", "rust" },
-        highlight = { enable = true, additional_vim_regex_highlighting = false },
-    }
-)
-require("rust-tools").setup()
-require("inc_rename").setup()
-require("tabline").setup({ no_name = "[]" })
-require("telescope").setup(
-    { defaults = { mappings = { n = { ["<Leader>q"] = require("telescope.actions").close } } } }
-)
+require("Comment").setup{}
+require("formatter").setup{
+    filetype = {
+        python = { require("formatter.filetypes.python").autopep8 },
+        c = {
+            function()
+                return {
+                    exe = "uncrustify",
+                    args = { "-q", "-l C" },
+                    stdin = true,
+                 }
+            end,
+         },
+        cpp = {
+            function()
+                return {
+                    exe = "uncrustify",
+                    args = { "-q", "-l C" },
+                    stdin = true,
+                 }
+            end,
+         },
+        lua = {
+            function()
+                return {
+                    exe = "lua-format -i",
+                    args = { "-i" },
+                    stdin = false,
+                 }
+            end,
+         },
+        dart = {
+            function() return { exe = "flutter format", stdin = false } end,
+         },
+        go = { require("formatter.filetypes.go").gofumpt },
+        haskell = {
+            function() return { exe = "fourmolu", stdin = true } end,
+         },
+        rust = {
+            function()
+                return {
+                    exe = "rustfmt",
+                    args = { "--edition 2021" },
+                    stdin = true,
+                 }
+            end,
+         },
+     },
+ }
+
+require("gitsigns").setup{}
+require("lualine").setup{
+    options = {
+        theme = "moonfly",
+        section_separators = { left = "", right = "" },
+        component_separators = { left = "", right = "" },
+     },
+ }
+
+require("nvim-autopairs").setup{}
+require("nvim-lsp-installer").setup{ automatic_installation = false }
+require("nvim-treesitter.configs").setup{
+    ensure_installed = {
+        "bash",
+        "c",
+        "cpp",
+        "go",
+        "java",
+        "lua",
+        "python",
+        "rust",
+     },
+    highlight = {
+        enable = true,
+        additional_vim_regex_highlighting = false,
+     },
+ }
+
+require("rust-tools").setup{}
+require("inc_rename").setup{}
+require("tabline").setup{ no_name = "[]" }
+require("telescope").setup{
+    defaults = {
+        mappings = {
+            n = { ["<Leader>q"] = require("telescope.actions").close },
+         },
+     },
+ }
+
 require("telescope").load_extension("ui-select")
-require("toggleterm").setup(
-    { open_mapping = [[<C-t>]], insert_mapping = false, direction = "float" }
-)
-require("which-key").setup()
-require("flutter-tools").setup(
-    {
-        lsp = {
-            color = {
-                enabled = true,
-                background = false,
-                foreground = false,
-                virtual_text = true,
-                virtual_text_str = "■",
-            },
-        },
-    }
-)
+require("toggleterm").setup{
+    open_mapping = [[<C-t>]],
+    insert_mapping = false,
+    direction = "float",
+ }
+
+require("which-key").setup{}
+require("flutter-tools").setup{
+    lsp = {
+        color = {
+            enabled = true,
+            background = false,
+            foreground = false,
+            virtual_text = true,
+            virtual_text_str = "■",
+         },
+     },
+ }
+
 -- isort
 
 local cmp = require("cmp")
 cmp.setup.cmdline(
-    ":", { sources = { { name = "cmdline" } }, mapping = cmp.mapping.preset.cmdline({}) }
+    ":", {
+        sources = { { name = "cmdline" } },
+        mapping = cmp.mapping.preset.cmdline{},
+     }
 )
 cmp.setup.cmdline(
-    "/", { sources = { { name = "buffer" } }, mapping = cmp.mapping.preset.cmdline({}) }
+    "/", {
+        sources = { { name = "buffer" } },
+        mapping = cmp.mapping.preset.cmdline{},
+     }
 )
 
-local on_confirm_done = require("nvim-autopairs.completion.cmp").on_confirm_done(
-    { map_char = { tex = "" } }
-)
+local on_confirm_done = require("nvim-autopairs.completion.cmp").on_confirm_done{
+    map_char = { tex = "" },
+ }
+
 cmp.event:on("confirm_done", on_confirm_done)
 
 cmp.setup(
     {
-        snippet = { expand = function(args) vim.fn["vsnip#anonymous"](args.body) end },
+        snippet = {
+            expand = function(args) vim.fn["vsnip#anonymous"](args.body) end,
+         },
         mapping = {
             ["<Tab>"] = function(fallback)
                 if cmp.visible() then
@@ -356,32 +408,45 @@ cmp.setup(
                     fallback()
                 end
             end,
-            ["<C-b>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
-            ["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
-            ["<C-Space>"] = cmp.mapping(cmp.mapping.complete(_), { "i", "c" }),
+            ["<C-b>"] = cmp.mapping(
+                cmp.mapping.scroll_docs(-4), { "i", "c" }
+            ),
+            ["<C-f>"] = cmp.mapping(
+                cmp.mapping.scroll_docs(4), { "i", "c" }
+            ),
+            ["<C-Space>"] = cmp.mapping(
+                cmp.mapping.complete(_), { "i", "c" }
+            ),
             ["<C-y>"] = cmp.config.disable,
-            ["<C-e>"] = cmp.mapping({ i = cmp.mapping.abort(), c = cmp.mapping.close() }),
-            ["<CR>"] = cmp.mapping.confirm({ select = false }),
-        },
-        sources = cmp.config.sources(
-            { { name = "nvim_lsp" }, { name = "vsnip" }, { name = "path" } },
-            { { name = "buffer" } }
-        ),
-    }
+            ["<C-e>"] = cmp.mapping{
+                i = cmp.mapping.abort(),
+                c = cmp.mapping.close(),
+             },
+            ["<CR>"] = cmp.mapping.confirm{ select = false },
+         },
+        sources = cmp.config.sources{
+            { name = "nvim_lsp" },
+            { name = "vsnip" },
+            { name = "path" },
+         },
+        { { name = "buffer" } },
+     }
 )
 
 local capabilities = require("cmp_nvim_lsp").update_capabilities(
     vim.lsp.protocol.make_client_capabilities()
 )
 
-local lua_dev = require("lua-dev").setup(
-    { capabilities = capabilities, settings = { Lua = { format = { enable = false } } } }
-)
+local lua_dev = require("lua-dev").setup{
+    capabilities = capabilities,
+    settings = { Lua = { format = { enable = false } } },
+ }
+
 table.insert(lua_dev.settings.Lua.workspace.library, "/usr/share/awesome/lib")
 lua_dev.settings.Lua.diagnostics = {
     disable = { "lowercase-global" },
     globals = { "client", "awesome", "screen", "root" },
-}
+ }
 
 local def = { capabilities = capabilities }
 local lsp = require("lspconfig")
