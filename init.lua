@@ -370,27 +370,27 @@ cmp.setup(
     }
 )
 
-local cmp_capabilities = require("cmp_nvim_lsp").update_capabilities(
+local capabilities = require("cmp_nvim_lsp").update_capabilities(
     vim.lsp.protocol.make_client_capabilities()
 )
-local lsp = require("lspconfig")
-local function setup(server, cfg)
-    local default_cfg = { capabilities = cmp_capabilities }
-    for k, v in pairs(cfg or {}) do default_cfg[k] = v end
-    lsp[server].setup(default_cfg)
-end
 
-setup("bashls")
-setup("clangd")
-setup("gopls")
-setup("hls")
-setup("pyright")
-setup("rust_analyzer")
-local luadev = require("lua-dev").setup({ settings = { Lua = { format = { enable = false } } } })
-table.insert(luadev.settings.Lua.workspace.library, "/usr/share/awesome/lib")
-luadev.settings.Lua.diagnostics = {
+local lua_dev = require("lua-dev").setup(
+    { capabilities = capabilities, settings = { Lua = { format = { enable = false } } } }
+)
+table.insert(lua_dev.settings.Lua.workspace.library, "/usr/share/awesome/lib")
+lua_dev.settings.Lua.diagnostics = {
     disable = { "lowercase-global" },
     globals = { "client", "awesome", "screen", "root" },
 }
-setup("sumneko_lua", luadev)
-setup("vimls")
+
+local def = { capabilities = capabilities }
+local lsp = require("lspconfig")
+
+lsp.bashls.setup(def)
+lsp.clangd.setup(def)
+lsp.gopls.setup(def)
+lsp.hls.setup(def)
+lsp.pyright.setup(def)
+lsp.rust_analyzer.setup(def)
+lsp.sumneko_lua.setup(lua_dev)
+lsp.vimls.setup(def)
