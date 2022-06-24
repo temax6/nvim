@@ -1,126 +1,139 @@
 local function map(mode, from, to, opts)
-	vim.api.nvim_set_keymap(mode, from, to, opts or { silent = true })
+    vim.api.nvim_set_keymap(mode, from, to, opts or { silent = true })
 end
--- stylua: ignore start
+
 local function imap(from, to, opts) map("i", from, to, opts) end
 local function nmap(from, to, opts) map("n", from, to, opts) end
 local function vmap(from, to, opts) map("v", from, to, opts) end
 local function xmap(from, to, opts) map("x", from, to, opts) end
--- stylua: ignore end
 
-function nvfmt()
-	if vim.fn.expand("%") == "init.lua" then
-		local ln = vim.api.nvim_win_get_cursor(0)
-		local lines = vim.api.nvim_buf_get_lines(0, 0, vim.api.nvim_buf_line_count(0), false)
-		local did = false
-		local cmd_start = -1
-		local sort_start = -1
-		for i, line in ipairs(lines) do
-			if string.match(line, "-- " .. "sort") == "-- " .. "sort" then
-				if sort_start == -1 then
-					sort_start = i + 1
-				else
-					vim.cmd(" :" .. sort_start .. "," .. i - 1 .. "sort")
-					sort_start = -1
-					did = true
-				end
-			elseif string.match(line, "-- " .. ":") == "-- " .. ":" then
-				if cmd_start == -1 then
-					cmd_start = i + 1
-				else
-					vim.cmd(":" .. cmd_start .. "," .. i - 1 .. string.sub(line, string.find(line, ":") + 1))
-					cmd_start = -1
-					did = true
-				end
-			end
-		end
-		if did then
-			vim.cmd(":" .. ln[1])
-		end
-	end
+function NvimFmt()
+    if vim.fn.expand("%", false, false) == "init.lua" then
+        local ln = vim.api.nvim_win_get_cursor(0)
+        local lines = vim.api.nvim_buf_get_lines(0, 0, vim.api.nvim_buf_line_count(0), false)
+        local did = false
+        local cmd_start = -1
+        local sort_start = -1
+        for i, line in ipairs(lines) do
+            if string.match(line, "-- " .. "sort") == "-- " .. "sort" then
+                if sort_start == -1 then
+                    sort_start = i + 1
+                else
+                    vim.cmd(" :" .. sort_start .. "," .. i - 1 .. "sort")
+                    sort_start = -1
+                    did = true
+                end
+            elseif string.match(line, "-- " .. ":") == "-- " .. ":" then
+                if cmd_start == -1 then
+                    cmd_start = i + 1
+                else
+                    vim.cmd(
+                        ":" .. cmd_start .. "," .. i - 1 ..
+                            string.sub(line, string.find(line, ":") + 1)
+                    )
+                    cmd_start = -1
+                    did = true
+                end
+            end
+        end
+        if did then vim.cmd(":" .. ln[1]) end
+    end
+end
+
+function ToggleScrolloff()
+    vim.cmd("let &scrolloff=mscrolloff-&scrolloff")
+    vim.cmd("let &sidescrolloff=msidescrolloff-&sidescrolloff")
 end
 
 local install_path = vim.fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
-if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-	PACKER_BOOTSTRAP = vim.fn.system({
-		"git",
-		"clone",
-		"--depth",
-		"1",
-		"https://github.com/wbthomason/packer.nvim",
-		install_path,
-	})
+if vim.fn.empty(vim.fn.glob(install_path, false, false)) > 0 then
+    PACKER_BOOTSTRAP = vim.fn.system(
+                           {
+            "git",
+            "clone",
+            "--depth",
+            "1",
+            "https://github.com/wbthomason/packer.nvim",
+            install_path,
+        }
+                       )
 end
 
 local packer = require("packer")
 
-packer.init({
-	display = {
-		open_fn = function()
-			return require("packer.util").float({ border = "rounded" })
-		end,
-	},
-	profile = {
-		enable = true,
-		threshold = 0,
-	},
-})
+packer.init(
+    {
+        display = {
+            open_fn = function()
+                return require("packer.util").float({ border = "rounded" })
+            end,
+        },
+        profile = { enable = true, threshold = 0 },
+    }
+)
 
-packer.startup(function(use)
-	for _, plugin in pairs({
-		-- sort
-		"RRethy/vim-illuminate",
-		"akinsho/toggleterm.nvim",
-		"bluz71/vim-moonfly-colors",
-		"crispgm/nvim-tabline",
-		"famiu/bufdelete.nvim",
-		"folke/which-key.nvim",
-		"hrsh7th/cmp-buffer",
-		"hrsh7th/cmp-cmdline",
-		"hrsh7th/cmp-nvim-lsp",
-		"hrsh7th/cmp-path",
-		"hrsh7th/cmp-vsnip",
-		"hrsh7th/nvim-cmp",
-		"hrsh7th/vim-vsnip",
-		"hrsh7th/vim-vsnip-integ",
-		"junegunn/vim-easy-align",
-		"kyazdani42/nvim-web-devicons",
-		"lewis6991/gitsigns.nvim",
-		"lewis6991/impatient.nvim",
-		"lukas-reineke/indent-blankline.nvim",
-		"mhartington/formatter.nvim",
-		"neovim/nvim-lspconfig",
-		"numToStr/Comment.nvim",
-		"nvim-lua/plenary.nvim",
-		"nvim-lualine/lualine.nvim",
-		"nvim-telescope/telescope.nvim",
-		"nvim-treesitter/nvim-treesitter",
-		"rafamadriz/friendly-snippets",
-		"tpope/vim-surround",
-		"wbthomason/packer.nvim",
-		"williamboman/nvim-lsp-installer",
-		"windwp/nvim-autopairs",
-		{ "dart-lang/dart-vim-plugin", ft = { "dart" } },
-		{ "mfussenegger/nvim-jdtls", ft = { "java" } },
-		-- sort
-	}) do
-		use(plugin)
-	end
+packer.startup(
+    function(use)
+        for _, plugin in pairs(
+                             {
+                -- sort
+                "RRethy/vim-illuminate",
+                "akinsho/flutter-tools.nvim",
+                "akinsho/toggleterm.nvim",
+                "bluz71/vim-moonfly-colors",
+                "crispgm/nvim-tabline",
+                "famiu/bufdelete.nvim",
+                "folke/lua-dev.nvim",
+                "folke/which-key.nvim",
+                "hrsh7th/cmp-buffer",
+                "hrsh7th/cmp-cmdline",
+                "hrsh7th/cmp-nvim-lsp",
+                "hrsh7th/cmp-path",
+                "hrsh7th/cmp-vsnip",
+                "hrsh7th/nvim-cmp",
+                "hrsh7th/vim-vsnip",
+                "hrsh7th/vim-vsnip-integ",
+                "junegunn/vim-easy-align",
+                "kyazdani42/nvim-web-devicons",
+                "lewis6991/gitsigns.nvim",
+                "lewis6991/impatient.nvim",
+                "lukas-reineke/indent-blankline.nvim",
+                "mhartington/formatter.nvim",
+                "neovim/nvim-lspconfig",
+                "numToStr/Comment.nvim",
+                "nvim-lua/plenary.nvim",
+                "nvim-lualine/lualine.nvim",
+                "nvim-telescope/telescope-ui-select.nvim",
+                "nvim-telescope/telescope.nvim",
+                "nvim-treesitter/nvim-treesitter",
+                "rafamadriz/friendly-snippets",
+                "simrat39/rust-tools.nvim",
+                "smjonas/inc-rename.nvim",
+                "tpope/vim-surround",
+                "wbthomason/packer.nvim",
+                "williamboman/nvim-lsp-installer",
+                "windwp/nvim-autopairs",
+                { "dart-lang/dart-vim-plugin", ft = { "dart" } },
+                { "mfussenegger/nvim-jdtls", ft = { "java" } },
+                -- sort
+            }
+                         ) do use(plugin) end
 
-	if PACKER_BOOTSTRAP then
-		packer.sync()
-	end
-end)
+        if PACKER_BOOTSTRAP then packer.sync() end
+    end
+)
 
-vim.cmd([[
+vim.cmd(
+    [[
 au BufWritePost *.tex silent! !latexmk -pdf && latexmk -c && pkill -HUP mupdf
-au User FormatterPost :lua nvfmt()
+au User FormatterPost :lua NvimFmt()
 au VimResized * wincmd =
 colorscheme moonfly
 hi TabLine guibg=bg
 hi TabLineFill guibg=bg
 hi TabLineSel guibg=bg
-]])
+]]
+)
 
 -- :
 -- sort
@@ -204,8 +217,8 @@ nmap("<leader>os",  ":so %<CR>")
 nmap("<leader>pdf", ":silent! !mupdf %:p:r.pdf &<CR>")
 nmap("<leader>ps",  ":PackerSync<CR>")
 nmap("<leader>q",   ":q!<CR>")
-nmap("<leader>r",   ":lua vim.lsp.buf.rename()<CR>")
-nmap("<leader>s",   ":let &scrolloff=mscrolloff-&scrolloff<CR>:let &sidescrolloff=msidescrolloff-&sidescrolloff<CR>")
+nmap("<leader>r",   ":IncRename ")
+nmap("<leader>s",   ":lua ToggleScrolloff()<CR>")
 nmap("<leader>tb",  ":Telescope current_buffer_fuzzy_find<CR>")
 nmap("<leader>td",  ":Telescope diagnostics<CR>")
 nmap("<leader>tf",  ":Telescope find_files hidden=true<CR>")
@@ -229,181 +242,162 @@ xmap("ga",          "<Plug>(EasyAlign)")
 local wk = require("which-key")
 local show = wk.show
 wk.show = function(keys, opts)
-	if vim.bo.filetype == "TelescopePrompt" then
-		return
-	end
-	show(keys, opts)
+    if vim.bo.filetype == "TelescopePrompt" then return end
+    show(keys, opts)
 end
 
 -- isort
 require("Comment").setup()
-require("formatter").setup({
-	filetype = {
-		python = { require("formatter.filetypes.python").autopep8 },
-		c = { require("formatter.filetypes.c").clangformat },
-		cpp = { require("formatter.filetypes.c").clangformat },
-		lua = {
-			require("formatter.filetypes.lua").stylua,
-		},
-		dart = {
-			function()
-				return {
-					exe = "flutter format",
-					stdin = false,
-				}
-			end,
-		},
-		go = { require("formatter.filetypes.go").gofumpt },
-		rust = {
-			function()
-				return {
-					exe = "rustfmt",
-					args = { "--edition 2021" },
-					stdin = true,
-				}
-			end,
-		},
-	},
-})
+require("formatter").setup(
+    {
+        filetype = {
+            python = { require("formatter.filetypes.python").autopep8 },
+            c = {
+                function()
+                    return { exe = "uncrustify", args = { "-q", "-l C" }, stdin = true }
+                end,
+            },
+            cpp = {
+                function()
+                    return { exe = "uncrustify", args = { "-q", "-l C" }, stdin = true }
+                end,
+            },
+            lua = { function()
+                return { exe = "lua-format -i", args = { "-i" }, stdin = false }
+            end },
+            dart = { function() return { exe = "flutter format", stdin = false } end },
+            go = { require("formatter.filetypes.go").gofumpt },
+            haskell = { function() return { exe = "fourmolu", stdin = true } end },
+            rust = {
+                function()
+                    return { exe = "rustfmt", args = { "--edition 2021" }, stdin = true }
+                end,
+            },
+        },
+    }
+)
 require("gitsigns").setup()
-require("lualine").setup({
-	options = {
-		theme = "moonfly",
-		section_separators = { left = "", right = "" },
-		component_separators = { left = "", right = "" },
-	},
-})
+require("lualine").setup(
+    {
+        options = {
+            theme = "moonfly",
+            section_separators = { left = "", right = "" },
+            component_separators = { left = "", right = "" },
+        },
+    }
+)
 require("nvim-autopairs").setup()
 require("nvim-lsp-installer").setup({ automatic_installation = false })
-require("nvim-treesitter.configs").setup({
-	ensure_installed = {
-		"bash",
-		"c",
-		"cpp",
-		"dart",
-		"go",
-		"java",
-		"lua",
-		"python",
-		"rust",
-	},
-	highlight = {
-		enable = true,
-		additional_vim_regex_highlighting = false,
-	},
-})
-require("tabline").setup({
-	no_name = "[]",
-})
-require("telescope").setup({
-	defaults = {
-		mappings = {
-			n = {
-				["<Leader>q"] = require("telescope.actions").close,
-			},
-		},
-	},
-})
-require("toggleterm").setup({
-	open_mapping = [[<C-t>]],
-	insert_mapping = false,
-	direction = "float",
-})
+require("nvim-treesitter.configs").setup(
+    {
+        ensure_installed = { "bash", "c", "cpp", "go", "java", "lua", "python", "rust" },
+        highlight = { enable = true, additional_vim_regex_highlighting = false },
+    }
+)
+require("rust-tools").setup()
+require("inc_rename").setup()
+require("tabline").setup({ no_name = "[]" })
+require("telescope").setup(
+    { defaults = { mappings = { n = { ["<Leader>q"] = require("telescope.actions").close } } } }
+)
+require("telescope").load_extension("ui-select")
+require("toggleterm").setup(
+    { open_mapping = [[<C-t>]], insert_mapping = false, direction = "float" }
+)
 require("which-key").setup()
+require("flutter-tools").setup(
+    {
+        lsp = {
+            color = {
+                enabled = true,
+                background = false,
+                foreground = false,
+                virtual_text = true,
+                virtual_text_str = "■",
+            },
+        },
+    }
+)
 -- isort
 
 local cmp = require("cmp")
-cmp.setup.cmdline(":", { sources = { { name = "cmdline" } }, mapping = cmp.mapping.preset.cmdline({}) })
-cmp.setup.cmdline("/", { sources = { { name = "buffer" } }, mapping = cmp.mapping.preset.cmdline({}) })
-
-cmp.event:on(
-	"confirm_done",
-	require("nvim-autopairs.completion.cmp").on_confirm_done({
-		map_char = { tex = "" },
-	})
+cmp.setup.cmdline(
+    ":", { sources = { { name = "cmdline" } }, mapping = cmp.mapping.preset.cmdline({}) }
+)
+cmp.setup.cmdline(
+    "/", { sources = { { name = "buffer" } }, mapping = cmp.mapping.preset.cmdline({}) }
 )
 
-cmp.setup({
-	snippet = {
-		expand = function(args)
-			vim.fn["vsnip#anonymous"](args.body)
-		end,
-	},
-	mapping = {
-		["<Tab>"] = function(fallback)
-			if cmp.visible() then
-				cmp.select_next_item()
-			elseif vim.fn["vsnip#available"](1) ~= 0 then
-				vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<Plug>(vsnip-expand-or-jump)", true, true, true), "")
-			else
-				fallback()
-			end
-		end,
-		["<S-Tab>"] = function(fallback)
-			if cmp.visible() then
-				cmp.select_prev_item()
-			elseif vim.fn["vsnip#available"](1) ~= 0 then
-				vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<Plug>(vsnip-jump-prev)", true, true, true), "")
-			else
-				fallback()
-			end
-		end,
-		["<C-b>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
-		["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
-		["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
-		["<C-y>"] = cmp.config.disable,
-		["<C-e>"] = cmp.mapping({
-			i = cmp.mapping.abort(),
-			c = cmp.mapping.close(),
-		}),
-		["<CR>"] = cmp.mapping.confirm({ select = false }),
-	},
-	sources = cmp.config.sources({
-		{ name = "nvim_lsp" },
-		{ name = "vsnip" },
-		{ name = "path" },
-	}, {
-		{ name = "buffer" },
-	}),
-})
+local on_confirm_done = require("nvim-autopairs.completion.cmp").on_confirm_done(
+                            { map_char = { tex = "" } }
+                        )
+cmp.event:on("confirm_done", on_confirm_done)
 
-local cmp_capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
+cmp.setup(
+    {
+        snippet = { expand = function(args) vim.fn["vsnip#anonymous"](args.body) end },
+        mapping = {
+            ["<Tab>"] = function(fallback)
+                if cmp.visible() then
+                    cmp.select_next_item()
+                elseif vim.fn["vsnip#available"](1) ~= 0 then
+                    vim.fn.feedkeys(
+                        vim.api.nvim_replace_termcodes(
+                            "<Plug>(vsnip-expand-or-jump)", true, true, true
+                        ), ""
+                    )
+                else
+                    fallback()
+                end
+            end,
+            ["<S-Tab>"] = function(fallback)
+                if cmp.visible() then
+                    cmp.select_prev_item()
+                elseif vim.fn["vsnip#available"](1) ~= 0 then
+                    vim.fn.feedkeys(
+                        vim.api.nvim_replace_termcodes(
+                            "<Plug>(vsnip-jump-prev)", true, true, true
+                        ), ""
+                    )
+                else
+                    fallback()
+                end
+            end,
+            ["<C-b>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
+            ["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
+            ["<C-Space>"] = cmp.mapping(cmp.mapping.complete(_), { "i", "c" }),
+            ["<C-y>"] = cmp.config.disable,
+            ["<C-e>"] = cmp.mapping({ i = cmp.mapping.abort(), c = cmp.mapping.close() }),
+            ["<CR>"] = cmp.mapping.confirm({ select = false }),
+        },
+        sources = cmp.config.sources(
+            { { name = "nvim_lsp" }, { name = "vsnip" }, { name = "path" } },
+            { { name = "buffer" } }
+        ),
+    }
+)
+
+local cmp_capabilities = require("cmp_nvim_lsp").update_capabilities(
+                             vim.lsp.protocol.make_client_capabilities()
+                         )
 local lsp = require("lspconfig")
 local function setup(server, cfg)
-	local default_cfg = { capabilities = cmp_capabilities }
-	for k, v in pairs(cfg or {}) do
-		default_cfg[k] = v
-	end
-	lsp[server].setup(default_cfg)
+    local default_cfg = { capabilities = cmp_capabilities }
+    for k, v in pairs(cfg or {}) do default_cfg[k] = v end
+    lsp[server].setup(default_cfg)
 end
 
 setup("bashls")
 setup("clangd")
-setup("dartls", { flags = { debounce_text_changes = 1000 } })
 setup("gopls")
+setup("hls")
 setup("pyright")
 setup("rust_analyzer")
-setup("sumneko_lua", {
-	settings = {
-		Lua = {
-			format = {
-				enable = false,
-			},
-			diagnostics = {
-				disable = {
-					"lowercase-global",
-				},
-				globals = {
-					"vim",
-					"on_attach",
-					"PACKER_BOOTSTRAP",
-					"client",
-					"awesome",
-					"screen",
-					"root",
-				},
-			},
-		},
-	},
-})
+local luadev = require("lua-dev").setup({ settings = { Lua = { format = { enable = false } } } })
+table.insert(luadev.settings.Lua.workspace.library, "/usr/share/awesome/lib")
+luadev.settings.Lua.diagnostics = {
+    disable = { "lowercase-global" },
+    globals = { "client", "awesome", "screen", "root" },
+}
+setup("sumneko_lua", luadev)
 setup("vimls")
