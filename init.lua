@@ -134,6 +134,8 @@ packer.startup(function(use)
 	end
 end)
 
+vim.g.moonflyTransparent = 1
+
 vim.cmd [[
 au BufWritePost *.tex silent! !latexmk -pdf && latexmk -c && pkill -HUP mupdf
 au User FormatterPost :lua NvimFmt()
